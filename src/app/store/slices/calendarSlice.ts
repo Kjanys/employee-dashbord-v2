@@ -1,14 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IEmployee } from "../../types/common/i-employee";
+import { IIncident } from "../../types/common/i-incident";
+import { mockCalendarIncidents } from "@/app/data/mockCalendarIncidents";
 
 interface CalendarState {
-  currentMonthEmployees: IEmployee[]; // Сотрудники, отображаемые на календаре за текущий месяц
+  currentMonthEmployees: IIncident[]; // Сотрудники, отображаемые на календаре за текущий месяц
   currentMonth: number; // Текущий месяц (0-11, где 0 — январь)
   currentYear: number; // Текущий год
 }
 
 const initialState: CalendarState = {
-  currentMonthEmployees: [],
+  currentMonthEmployees: mockCalendarIncidents,
   currentMonth: new Date().getMonth(), // Текущий месяц по умолчанию
   currentYear: new Date().getFullYear(), // Текущий год по умолчанию
 };
@@ -18,7 +19,7 @@ const calendarSlice = createSlice({
   initialState,
   reducers: {
     // Устанавливаем сотрудников для текущего месяца
-    setCurrentMonthEmployees(state, action: PayloadAction<IEmployee[]>) {
+    setCurrentMonthEmployees(state, action: PayloadAction<IIncident[]>) {
       state.currentMonthEmployees = action.payload;
     },
     // Изменяем текущий месяц

@@ -2,13 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Theme = "light" | "dark";
 
-// Получаем тему из localStorage или устанавливаем светлую по умолчанию
 const getInitialTheme = (): Theme => {
   if (typeof window !== "undefined") {
     const savedTheme = localStorage.getItem("theme") as Theme;
-    return savedTheme || "light";
+    return savedTheme || "dark";
   }
-  return "light";
+  return "dark";
 };
 
 interface ThemeState {
@@ -23,6 +22,7 @@ const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
+    //TODO убрать лишнее
     setTheme(state, action: PayloadAction<Theme>) {
       state.theme = action.payload;
       localStorage.setItem("theme", action.payload); // Сохраняем тему в localStorage

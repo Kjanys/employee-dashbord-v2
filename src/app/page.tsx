@@ -1,11 +1,10 @@
-// src/app/page.tsx
 'use client';
 import { configure } from '@gravity-ui/uikit';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Calendar from './components/Calendar';
+import Calendar from './components/calendar/Calendar';
 import Header from './components/Header';
-import { mockCalendarEmployees } from './data/mockCalendarEmployees';
+import { mockCalendarIncidents } from './data/mockCalendarIncidents';
 import { setCurrentMonthEmployees } from './store/slices/calendarSlice';
 import { RootState } from './store/store';
 import AppFooter from './components/Footer';
@@ -21,21 +20,19 @@ export default function Home() {
   // Загружаем моковые данные при монтировании компонента
   useEffect(() => {
     if (isAuthenticated) {
-      dispatch(setCurrentMonthEmployees(mockCalendarEmployees));
+      dispatch(setCurrentMonthEmployees(mockCalendarIncidents));
     }
   }, [dispatch, isAuthenticated]);
 
   return (
-    <div className="min-h-screen flex flex-col h-full"> {/* Добавляем h-full */}
+    <div className="min-h-screen flex flex-col h-full overflow-hidden"> {/* Добавляем h-full */}
       {/* Шапка */}
       <Header />
 
       {/* Основной контент */}
-      <div className="flex-1 p-6 flex flex-col h-full"> {/* Добавляем h-full */}
-        <div className="flex-1 h-full"> {/* Добавляем h-full */}
+        <div className="p-3 flex-1 h-full"> {/* Добавляем h-full */}
           <Calendar />
         </div>
-      </div>
 
       {/* Футер */}
       <AppFooter />
