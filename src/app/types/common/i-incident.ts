@@ -1,5 +1,6 @@
 export type IIncident = {
   id: number;
+  userId: number;
   name: string;
   surname: string;
   status: IIncidentStatus;

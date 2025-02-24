@@ -3,6 +3,7 @@ import { IIncident, IIncidentStatus } from "../types/common/i-incident";
 export const mockCalendarIncidents: IIncident[] = [
   {
     id: 1,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.OTHER,
@@ -10,6 +11,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 11,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.SICK,
@@ -17,6 +19,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 12,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.STUDY,
@@ -24,6 +27,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 13,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.REMOTE,
@@ -31,6 +35,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 14,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.OTHER,
@@ -38,6 +43,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 15,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.REMOTE,
@@ -45,6 +51,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 16,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.REMOTE,
@@ -52,6 +59,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 17,
+    userId: 1,
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.REMOTE,
@@ -59,6 +67,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 2,
+    userId: 2,
     name: "Петр",
     surname: "Петров",
     status: IIncidentStatus.SICK,
@@ -66,6 +75,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 3,
+    userId: 3,
     name: "Сидор",
     surname: "Сидоров",
     status: IIncidentStatus.VACATION,
@@ -73,6 +83,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 4,
+    userId: 4,
     name: "Мария",
     surname: "Кузнецова",
     status: IIncidentStatus.REMOTE,
@@ -80,6 +91,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 5,
+    userId: 5,
     name: "Анна",
     surname: "Смирнова",
     status: IIncidentStatus.SICK,
@@ -87,6 +99,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 6,
+    userId: 6,
     name: "Олег",
     surname: "Новиков",
     status: IIncidentStatus.STUDY,
@@ -94,6 +107,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 61,
+    userId: 6,
     name: "Олег",
     surname: "Новиков",
     status: IIncidentStatus.STUDY,
@@ -101,6 +115,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 62,
+    userId: 6,
     name: "Олег",
     surname: "Новиков",
     status: IIncidentStatus.STUDY,
@@ -108,6 +123,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 63,
+    userId: 6,
     name: "Олег",
     surname: "Новиков",
     status: IIncidentStatus.STUDY,
@@ -115,6 +131,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 64,
+    userId: 6,
     name: "Олег",
     surname: "Новиков",
     status: IIncidentStatus.STUDY,
@@ -122,6 +139,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 7,
+    userId: 7,
     name: "Елена",
     surname: "Воробьева",
     status: IIncidentStatus.VACATION,
@@ -129,6 +147,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 8,
+    userId: 8,
     name: "Дмитрий",
     surname: "Козлов",
     status: IIncidentStatus.SICK,
@@ -136,6 +155,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 9,
+    userId: 9,
     name: "Татьяна",
     surname: "Морозова",
     status: IIncidentStatus.REMOTE,
@@ -143,6 +163,7 @@ export const mockCalendarIncidents: IIncident[] = [
   },
   {
     id: 10,
+    userId: 10,
     name: "Алексей",
     surname: "Павлов",
     status: IIncidentStatus.VACATION,

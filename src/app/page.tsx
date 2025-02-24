@@ -1,16 +1,24 @@
-'use client';
-import { configure } from '@gravity-ui/uikit';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Calendar from './components/calendar/Calendar';
-import Header from './components/Header';
-import { mockCalendarIncidents } from './data/mockCalendarIncidents';
-import { setCurrentMonthEmployees } from './store/slices/calendarSlice';
-import { RootState } from './store/store';
-import AppFooter from './components/Footer';
+"use client";
+import { configure } from "@gravity-ui/uikit";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Calendar from "./components/calendar/Calendar";
+import Header from "./components/header/Header";
+import { mockCalendarIncidents } from "./data/mockCalendarIncidents";
+import { setCurrentMonthEmployees } from "./store/slices/calendarSlice";
+import { RootState } from "./store/store";
+import AppFooter from "./components/Footer";
+import { settings } from "@gravity-ui/date-utils";
+
+settings.getLocale();
+settings.loadLocale("ru").then(() => {
+  settings.setLocale("ru");
+  settings.getLocale();
+});
 
 configure({
-  lang: 'ru',
+  lang: "ru",
+  fallbackLang: "ru",
 });
 
 export default function Home() {
@@ -25,15 +33,17 @@ export default function Home() {
   }, [dispatch, isAuthenticated]);
 
   return (
-    <div className="min-h-screen flex flex-col h-full overflow-hidden"> {/* Добавляем h-full */}
+    <div className="min-h-screen flex flex-col h-full overflow-hidden">
+      {" "}
+      {/* Добавляем h-full */}
       {/* Шапка */}
       <Header />
-
       {/* Основной контент */}
-        <div className="p-3 flex-1 h-full"> {/* Добавляем h-full */}
-          <Calendar />
-        </div>
-
+      <div className="p-3 flex-1 h-full">
+        {" "}
+        {/* Добавляем h-full */}
+        <Calendar />
+      </div>
       {/* Футер */}
       <AppFooter />
     </div>

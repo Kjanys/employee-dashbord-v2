@@ -1,22 +1,19 @@
+import { User } from "@/app/types/system/i-user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 
 interface UserState {
   user: User | null;
   isAuthenticated: boolean;
 }
+const MOCK_USER = {
+  id: "1",
+  name: "Иван",
+  surname: "Иванов",
+  login: "admin",
+};
 
-// Проверяем localStorage при инициализации состояния
 const initialState: UserState = {
-  user:
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage?.getItem("user") || "null")
-      : null,
+  user: MOCK_USER,
   isAuthenticated: !!localStorage?.getItem("user"),
 };
 
@@ -26,15 +23,16 @@ const userSlice = createSlice({
   reducers: {
     // Логин пользователя
     login(state, action: PayloadAction<User>) {
-      state.user = action.payload;
+      state.user = MOCK_USER;
       state.isAuthenticated = true;
-      localStorage?.setItem("user", JSON.stringify(action.payload)); // Сохраняем пользователя в localStorage
+      console.log("action.payload", action.payload);
+      //localStorage?.setItem("user", JSON.stringify(action.payload));
     },
     // Логаут пользователя
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
-      localStorage?.removeItem("user"); // Удаляем пользователя из localStorage
+      localStorage?.removeItem("user");
     },
   },
 });
