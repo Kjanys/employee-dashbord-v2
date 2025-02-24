@@ -25,8 +25,8 @@ export default function Calendar() {
   const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null);
   const [popoverDay, setPopoverDay] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null); // Выбранный день
-  const [isSheetOpen, setIsSheetOpen] = useState(false); // Состояние для открытия/закрытия Sheet
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const { currentMonthEmployees } = useSelector(
     (state: RootState) => state.calendar

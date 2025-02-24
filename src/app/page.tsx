@@ -9,6 +9,7 @@ import { setCurrentMonthEmployees } from "./store/slices/calendarSlice";
 import { RootState } from "./store/store";
 import AppFooter from "./components/Footer";
 import { settings } from "@gravity-ui/date-utils";
+import IncidentButton from "./components/IncidentButton";
 
 settings.getLocale();
 settings.loadLocale("ru").then(() => {
@@ -34,18 +35,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col h-full overflow-hidden">
-      {" "}
-      {/* Добавляем h-full */}
       {/* Шапка */}
       <Header />
       {/* Основной контент */}
       <div className="p-3 flex-1 h-full">
-        {" "}
-        {/* Добавляем h-full */}
         <Calendar />
       </div>
       {/* Футер */}
       <AppFooter />
+      {/* Кнопка добавления записи */}
+      <IncidentButton />
     </div>
   );
 }
