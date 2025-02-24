@@ -4,7 +4,7 @@ type Theme = "light" | "dark";
 
 const getInitialTheme = (): Theme => {
   if (typeof window !== "undefined") {
-    const savedTheme = localStorage.getItem("theme") as Theme;
+    const savedTheme = localStorage?.getItem("theme") as Theme;
     return savedTheme || "dark";
   }
   return "dark";
@@ -25,11 +25,11 @@ const themeSlice = createSlice({
     //TODO убрать лишнее
     setTheme(state, action: PayloadAction<Theme>) {
       state.theme = action.payload;
-      localStorage.setItem("theme", action.payload); // Сохраняем тему в localStorage
+      localStorage?.setItem("theme", action.payload); // Сохраняем тему в localStorage
     },
     toggleTheme(state) {
       state.theme = state.theme === "light" ? "dark" : "light";
-      localStorage.setItem("theme", state.theme); // Сохраняем тему в localStorage
+      localStorage?.setItem("theme", state.theme); // Сохраняем тему в localStorage
     },
   },
 });

@@ -13,8 +13,11 @@ interface UserState {
 
 // Проверяем localStorage при инициализации состояния
 const initialState: UserState = {
-  user: JSON.parse(localStorage.getItem("user") || "null"),
-  isAuthenticated: !!localStorage.getItem("user"),
+  user:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage?.getItem("user") || "null")
+      : null,
+  isAuthenticated: !!localStorage?.getItem("user"),
 };
 
 const userSlice = createSlice({
@@ -25,13 +28,13 @@ const userSlice = createSlice({
     login(state, action: PayloadAction<User>) {
       state.user = action.payload;
       state.isAuthenticated = true;
-      localStorage.setItem("user", JSON.stringify(action.payload)); // Сохраняем пользователя в localStorage
+      localStorage?.setItem("user", JSON.stringify(action.payload)); // Сохраняем пользователя в localStorage
     },
     // Логаут пользователя
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("user"); // Удаляем пользователя из localStorage
+      localStorage?.removeItem("user"); // Удаляем пользователя из localStorage
     },
   },
 });
