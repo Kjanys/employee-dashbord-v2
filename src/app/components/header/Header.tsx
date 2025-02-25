@@ -1,5 +1,5 @@
 "use client";
-import { Moon, Sun } from "@gravity-ui/icons";
+import { Book, Moon, Sun } from "@gravity-ui/icons";
 import { Button, Icon, User, Popover } from "@gravity-ui/uikit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -54,7 +54,7 @@ export default function Header() {
         {/* Кнопка "Журнал" (только для авторизованных пользователей) */}
         {isAuthenticated && (
           <Button onClick={handleJournal} view="raised">
-            Журнал
+            <Icon data={Book} />
           </Button>
         )}
 
