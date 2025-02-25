@@ -40,8 +40,8 @@ export default function Calendar() {
     };
 
     handleResize(); // Проверяем при загрузке
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window?.addEventListener("resize", handleResize);
+    return () => window?.removeEventListener("resize", handleResize);
   }, []);
 
   // Обработчик нажатия клавиш
@@ -55,7 +55,7 @@ export default function Calendar() {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => window?.removeEventListener("keydown", handleKeyDown);
   }, [currentDate]);
 
   // Обработчик свайпов

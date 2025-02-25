@@ -1,13 +1,19 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import "@gravity-ui/uikit/styles/fonts.css";
 import "@gravity-ui/uikit/styles/styles.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito } from "next/font/google";
+import ClientThemeProvider from "./components/ClientThemeProvider";
 import "./globals.css";
 import { Providers } from "./providers";
-import ClientThemeProvider from "./components/ClientThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const nunito = Nunito({
+  subsets: ["cyrillic"],
+  variable: "--font-nunito",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Status Tracker",
@@ -24,9 +30,13 @@ export default function RootLayout({
       <head>
         <script src="/env.js" />
       </head>
-      <body className={`${inter.className} h-full`}>
+      <body className={`${nunito.className} h-full`}>
         <Providers>
-          <ClientThemeProvider>{children}</ClientThemeProvider>
+          <ClientThemeProvider>
+            {children}
+            <Analytics />
+            <SpeedInsights />
+          </ClientThemeProvider>
         </Providers>
       </body>
     </html>

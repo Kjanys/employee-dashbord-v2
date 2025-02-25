@@ -5,6 +5,7 @@ interface UserState {
   user: User | null;
   isAuthenticated: boolean;
 }
+
 const MOCK_USER = {
   id: "1",
   name: "Иван",
@@ -14,7 +15,7 @@ const MOCK_USER = {
 
 const initialState: UserState = {
   user: MOCK_USER,
-  isAuthenticated: false, //!!localStorage?.getItem("user"),
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -26,13 +27,11 @@ const userSlice = createSlice({
       state.user = MOCK_USER;
       state.isAuthenticated = true;
       console.log("action.payload", action.payload);
-      //localStorage?.setItem("user", JSON.stringify(action.payload));
     },
     // Логаут пользователя
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
-      //localStorage?.removeItem("user");
     },
   },
 });
