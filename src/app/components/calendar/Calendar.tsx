@@ -160,7 +160,7 @@ export default function Calendar() {
 
   return (
     <div className="h-full overflow-hidden" {...handlers}>
-      <Card className="p-4 dark:bg-gray-700 flex flex-col h-full">
+      <Card className="p-4 flex flex-col h-full">
         {/* Шапка с кнопками и названием месяца */}
         <CalendarHeader
           currentDate={currentDate}
