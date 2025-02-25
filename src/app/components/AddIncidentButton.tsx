@@ -4,8 +4,12 @@ import { Button, Icon } from "@gravity-ui/uikit";
 import { useState } from "react";
 import { IIncident } from "../types/common/i-incident";
 import IcidentModal from "./IcidentModal";
+import { RootState } from "../store/store";
+import { useSelector } from "react-redux";
 
 export default function AddIncidentButton() {
+  const { isAuthenticated } = useSelector((state: RootState) => state.user);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -20,9 +24,11 @@ export default function AddIncidentButton() {
   return (
     <div className="fixed bottom-8 right-3 z-50 sm:right-8 sm:bottom-8">
       {/* Кнопка добавления записи */}
-      <Button view="action" size="xl" onClick={handleOpenModal}>
-        <Icon data={Plus} />
-      </Button>
+      {isAuthenticated && (
+        <Button view="action" size="xl" onClick={handleOpenModal}>
+          <Icon data={Plus} />
+        </Button>
+      )}
 
       {/* Модальное окно */}
       <IcidentModal
