@@ -9,7 +9,7 @@ import { setCurrentMonthEmployees } from "./store/slices/calendarSlice";
 import { RootState } from "./store/store";
 import AppFooter from "./components/Footer";
 import { settings } from "@gravity-ui/date-utils";
-import IncidentButton from "./components/IncidentButton";
+import AddIncidentButton from "./components/AddIncidentButton";
 
 settings.getLocale();
 settings.loadLocale("ru").then(() => {
@@ -44,7 +44,7 @@ export default function Home() {
       {/* Футер */}
       <AppFooter />
       {/* Кнопка добавления записи */}
-      <IncidentButton />
+      <AddIncidentButton />
     </div>
   );
 }

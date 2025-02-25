@@ -1,6 +1,6 @@
 "use client";
 import { Moon, Sun } from "@gravity-ui/icons";
-import { Button, Icon, User } from "@gravity-ui/uikit";
+import { Button, Icon, User, Popover } from "@gravity-ui/uikit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,7 @@ export default function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const handleLogin = () => {
     setIsModalOpen(true);
@@ -30,6 +31,7 @@ export default function Header() {
   const handleLogout = () => {
     dispatch(logout());
     router.push("/");
+    setIsPopoverOpen(false);
   };
 
   const handleToggleTheme = () => {
@@ -58,18 +60,34 @@ export default function Header() {
 
         {/* Кнопка входа или компонент пользователя */}
         {isAuthenticated && user ? (
-          <div onClick={handleLogout} className="cursor-pointer">
-            <User
-              avatar={{
-                text: "AS",
-                theme: "brand",
-                title: `${user.name + " " + user.surname}`,
-                backgroundColor: "var(--g-color-private-blue-650-solid)",
-              }}
-              name={`${user.name + " " + user.surname}`}
-              size="m"
-            />
-          </div>
+          <Popover
+            content={
+              <div className="p-2">
+                <Button onClick={handleLogout} view="flat-danger" size="m">
+                  Выйти
+                </Button>
+              </div>
+            }
+            open={isPopoverOpen}
+            onOpenChange={(open) => setIsPopoverOpen(open)}
+            placement="bottom-end"
+          >
+            <div
+              onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+              className="cursor-pointer"
+            >
+              <User
+                avatar={{
+                  text: "AS",
+                  theme: "brand",
+                  title: `${user.name + " " + user.surname}`,
+                  backgroundColor: "var(--g-color-private-blue-650-solid)",
+                }}
+                name={`${user.name + " " + user.surname}`}
+                size="m"
+              />
+            </div>
+          </Popover>
         ) : (
           <Button onClick={handleLogin} view="raised">
             Войти

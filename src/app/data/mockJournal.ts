@@ -7,7 +7,7 @@ export const mockJournal: IIncident[] = [
     name: "Иван",
     surname: "Иванов",
     status: IIncidentStatus.OTHER,
-    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+    date: { start: new Date(2025, 1, 1), end: new Date(2025, 1, 3) }, // Единичная дата: 15 февраля 2025
   },
   {
     id: 11,
