@@ -169,4 +169,228 @@ export const mockCalendarIncidents: IIncident[] = [
     status: IIncidentStatus.VACATION,
     date: new Date(2025, 1, 28), // Единичная дата: 28 февраля 2025
   },
+  {
+    id: 311,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.SICK,
+    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 312,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.STUDY,
+    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 313,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 314,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.OTHER,
+    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 315,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 316,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 317,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 411,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.SICK,
+    date: new Date(2025, 1, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 412,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.STUDY,
+    date: new Date(2025, 1, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 413,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 414,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.OTHER,
+    date: new Date(2025, 1, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 415,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 416,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 417,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 1, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 311,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.SICK,
+    date: new Date(2025, 2, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 312,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.STUDY,
+    date: new Date(2025, 2, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 313,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 314,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.OTHER,
+    date: new Date(2025, 2, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 315,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 316,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 317,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 1), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 411,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.SICK,
+    date: new Date(2025, 2, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 412,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.STUDY,
+    date: new Date(2025, 2, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 413,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 414,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.OTHER,
+    date: new Date(2025, 2, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 415,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 416,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 8), // Единичная дата: 15 февраля 2025
+  },
+  {
+    id: 417,
+    userId: 1,
+    name: "Иван",
+    surname: "Иванов",
+    status: IIncidentStatus.REMOTE,
+    date: new Date(2025, 2, 8), // Единичная дата: 15 февраля 2025
+  },
 ];

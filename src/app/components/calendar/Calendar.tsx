@@ -27,7 +27,8 @@ export default function Calendar() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
+  const [cellHeight, setCellHeight] = useState<number>(0); // Высота ячейки
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const { currentMonthEmployees } = useSelector(
     (state: RootState) => state.calendar
   );
@@ -64,6 +65,7 @@ export default function Calendar() {
     trackMouse: true,
   });
 
+  // Обновление календаря
   const updateCalendar = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -76,6 +78,29 @@ export default function Calendar() {
 
     const endDay = new Date(year, month + 1, 0).getDay();
     setEndDay(endDay === 0 ? 0 : 7 - endDay);
+
+    // Рассчитываем количество строк в календаре
+    const totalDays =
+      daysInMonth +
+      (startDay === 0 ? 6 : startDay - 1) +
+      (endDay ? 7 - endDay : 0);
+
+    const rows = Math.ceil(totalDays / 7);
+
+    // Рассчитываем высоту ячейки
+    const calendar = document.getElementById("calendar-cells");
+    const calendarHeight = calendar?.getBoundingClientRect().height;
+    const computedStyles = window.getComputedStyle(calendar!);
+    const gapInRem = parseFloat(computedStyles.getPropertyValue("gap"));
+    const baseFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize
+    );
+    const gapInPixels = gapInRem * baseFontSize;
+
+    const cellHeight =
+      (calendarHeight || 0) / rows - gapInPixels / (rows * 3.5);
+
+    setCellHeight(cellHeight);
   };
 
   const handleSwitchMonth = (isPrev: boolean) => {
@@ -119,7 +144,19 @@ export default function Calendar() {
 
   useEffect(() => {
     updateCalendar(currentDate);
-  }, [currentDate]);
+  }, [currentDate, windowHeight]);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowHeight(window.innerHeight);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="h-full overflow-hidden" {...handlers}>
@@ -143,7 +180,9 @@ export default function Calendar() {
             initial="initial"
             animate="animate"
             exit="exit"
+            id="calendar-cells"
             className="grid grid-cols-7 gap-1 sm:gap-2 flex-1 overflow-hidden"
+            style={{ gridAutoRows: cellHeight }} // Динамическая высота строк
           >
             {/* Пустые ячейки в начале */}
             <EptyCells daysNumber={startDay} />
@@ -159,6 +198,7 @@ export default function Calendar() {
               handleDayClick={handleDayClick}
               handleClosePopover={handleClosePopover}
               handleOpenPopover={handleOpenPopover}
+              cellHeight={cellHeight} // Передаем высоту ячейки
             />
 
             {/* Пустые ячейки в конце */}
