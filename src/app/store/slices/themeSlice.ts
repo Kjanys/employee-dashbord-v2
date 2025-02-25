@@ -3,10 +3,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type Theme = "light" | "dark";
 
 const getInitialTheme = (): Theme => {
-  if (typeof window !== "undefined") {
-    //const savedTheme = localStorage?.getItem("theme") as Theme;
-    return "dark";
-  }
+  // if (typeof window !== "undefined") {
+  //   //const savedTheme = localStorage?.getItem("theme") as Theme;
+  //   return "dark";
+  // }
   return "dark";
 };
 
@@ -25,11 +25,11 @@ const themeSlice = createSlice({
     //TODO убрать лишнее
     setTheme(state, action: PayloadAction<Theme>) {
       state.theme = action.payload;
-      localStorage?.setItem("theme", action.payload);
+      //localStorage?.setItem("theme", action.payload);
     },
     toggleTheme(state) {
       state.theme = state.theme === "light" ? "dark" : "light";
-      localStorage?.setItem("theme", state.theme);
+      //localStorage?.setItem("theme", state.theme);
     },
   },
 });

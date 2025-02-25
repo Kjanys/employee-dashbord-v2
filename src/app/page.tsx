@@ -1,15 +1,10 @@
 "use client";
-import { configure } from "@gravity-ui/uikit";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Calendar from "./components/calendar/Calendar";
-import Header from "./components/header/Header";
-import { mockCalendarIncidents } from "./data/mockCalendarIncidents";
-import { setCurrentMonthEmployees } from "./store/slices/calendarSlice";
-import { RootState } from "./store/store";
-import AppFooter from "./components/Footer";
 import { settings } from "@gravity-ui/date-utils";
+import { configure } from "@gravity-ui/uikit";
 import AddIncidentButton from "./components/AddIncidentButton";
+import Calendar from "./components/calendar/Calendar";
+import AppFooter from "./components/Footer";
+import Header from "./components/header/Header";
 
 settings.getLocale();
 settings.loadLocale("ru").then(() => {
@@ -23,16 +18,6 @@ configure({
 });
 
 export default function Home() {
-  const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state: RootState) => state.user);
-
-  // Загружаем моковые данные при монтировании компонента
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(setCurrentMonthEmployees(mockCalendarIncidents));
-    }
-  }, [dispatch, isAuthenticated]);
-
   return (
     <div className="min-h-screen flex flex-col h-full overflow-hidden">
       {/* Шапка */}

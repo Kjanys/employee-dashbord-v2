@@ -14,7 +14,7 @@ const MOCK_USER = {
 
 const initialState: UserState = {
   user: MOCK_USER,
-  isAuthenticated: !!localStorage?.getItem("user"),
+  isAuthenticated: false, //!!localStorage?.getItem("user"),
 };
 
 const userSlice = createSlice({
@@ -32,7 +32,7 @@ const userSlice = createSlice({
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
-      localStorage?.removeItem("user");
+      //localStorage?.removeItem("user");
     },
   },
 });

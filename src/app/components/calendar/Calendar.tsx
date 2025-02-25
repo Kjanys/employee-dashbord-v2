@@ -28,7 +28,7 @@ export default function Calendar() {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [cellHeight, setCellHeight] = useState<number>(0); // Высота ячейки
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [windowHeight, setWindowHeight] = useState<number>();
   const { currentMonthEmployees } = useSelector(
     (state: RootState) => state.calendar
   );
@@ -90,7 +90,7 @@ export default function Calendar() {
     // Рассчитываем высоту ячейки
     const calendar = document.getElementById("calendar-cells");
     const calendarHeight = calendar?.getBoundingClientRect().height;
-    const computedStyles = window.getComputedStyle(calendar!);
+    const computedStyles = window?.getComputedStyle(calendar!);
     const gapInRem = parseFloat(computedStyles.getPropertyValue("gap"));
     const baseFontSize = parseFloat(
       getComputedStyle(document.documentElement).fontSize
@@ -148,7 +148,7 @@ export default function Calendar() {
 
   useEffect(() => {
     function handleResize() {
-      setWindowHeight(window.innerHeight);
+      setWindowHeight(window?.innerHeight);
     }
 
     window.addEventListener("resize", handleResize);
