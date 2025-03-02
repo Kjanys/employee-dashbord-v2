@@ -20,6 +20,7 @@ export default function JournalModal({
   isModalOpen,
   setIsModalOpen,
 }: JournalModalProps) {
+  const [sortDesc, setSortDesc] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState<IPeriod>(
     DEFAULT_JOURNAL_PERIOD
   );
@@ -36,6 +37,7 @@ export default function JournalModal({
 
   // Обработчик выбора периода
   const handlePeriodChange = (period: IPeriod) => {
+    console.log("period", period);
     setSelectedPeriod(period);
     setIsPopoverOpen(false);
   };
@@ -62,6 +64,8 @@ export default function JournalModal({
           selectedPeriod={selectedPeriod}
           setIsPopoverOpen={setIsPopoverOpen}
           handlePeriodChange={handlePeriodChange}
+          setSortDesc={setSortDesc}
+          sortDesc={sortDesc}
         />
 
         {/* Кнопки фильтрации по статусу */}
@@ -72,6 +76,8 @@ export default function JournalModal({
 
         {/* Список событий с прокруткой */}
         <JournalList
+          sortDesc={sortDesc}
+          handleCloseModal={handleCloseModal}
           selectedPeriod={selectedPeriod}
           selectedStatuses={selectedStatuses}
         />

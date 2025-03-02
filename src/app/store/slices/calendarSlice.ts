@@ -1,39 +1,136 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { CALEDAR_STOK_VALUE } from "@/app/consts/calendar";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IIncident } from "../../types/common/i-incident";
-import { mockCalendarIncidents } from "@/app/data/mockCalendarIncidents";
+import { isIncidentInPeriod } from "@/app/utils/getIsIncidentInPeriod";
+import { getCurentPeriod } from "@/app/utils/getCurentPeriod";
+import { getIncident } from "@/app/utils/getIncident";
+
+export type CurrentDate = {
+  month: number;
+  year: number;
+};
 
 interface CalendarState {
-  currentMonthEmployees: IIncident[]; // Сотрудники, отображаемые на календаре за текущий месяц
-  currentMonth: number; // Текущий месяц (0-11, где 0 — январь)
-  currentYear: number; // Текущий год
+  currentMonthIncidents: IIncident[]; // Сотрудники, отображаемые на календаре за текущий месяц
+  currentDate: CurrentDate;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: CalendarState = {
-  currentMonthEmployees: mockCalendarIncidents,
-  currentMonth: new Date().getMonth(), // Текущий месяц по умолчанию
-  currentYear: new Date().getFullYear(), // Текущий год по умолчанию
+  currentMonthIncidents: [],
+  currentDate: CALEDAR_STOK_VALUE,
+  loading: false,
+  error: null,
 };
+
+// Асинхронное действие для забора данных
+export const fetchIncidents = createAsyncThunk(
+  "calendar/fetchIncidents",
+  async ({ month, year }: CurrentDate, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `/api/incidents/all?month=${month}&year=${year}`
+      );
+      if (!response.ok) {
+        throw new Error("Ошибка при загрузке событий");
+      }
+
+      const data = await response.json();
+
+      const incidents = data.map((incident: any) => ({
+        ...incident,
+        date: !incident.date.start
+          ? new Date(incident.date)
+          : {
+              start: new Date(incident.date.start),
+              end: new Date(incident.date.end),
+            },
+      }));
+      return incidents;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const calendarSlice = createSlice({
   name: "calendar",
   initialState,
   reducers: {
-    // Устанавливаем сотрудников для текущего месяца
-    setCurrentMonthEmployees(state, action: PayloadAction<IIncident[]>) {
-      state.currentMonthEmployees = action.payload;
-    },
     // Изменяем текущий месяц
-    setCurrentMonth(state, action: PayloadAction<number>) {
-      state.currentMonth = action.payload;
+    setCurrentDate(state, action: PayloadAction<CurrentDate>) {
+      state.currentDate = action.payload;
+      state.loading = true;
+      state.error = null;
     },
-    // Изменяем текущий год
-    setCurrentYear(state, action: PayloadAction<number>) {
-      state.currentYear = action.payload;
+    setCurrentMonthIncidents(state, action: PayloadAction<IIncident[]>) {
+      state.currentMonthIncidents = action.payload;
     },
+    setAddIncidents(state, action: PayloadAction<IIncident>) {
+      if (
+        !isIncidentInPeriod(action.payload, getCurentPeriod(state.currentDate))
+      )
+        return;
+
+      state.currentMonthIncidents = [
+        ...state.currentMonthIncidents,
+        action.payload,
+      ];
+    },
+    setUpdateIncidents(state, action: PayloadAction<IIncident>) {
+      const newIncident = getIncident(action.payload);
+
+      if (!isIncidentInPeriod(newIncident, getCurentPeriod(state.currentDate)))
+        return;
+
+      const filtredIncidents = state.currentMonthIncidents.filter(
+        (item) => item.id !== action.payload.id
+      );
+      state.currentMonthIncidents = [...filtredIncidents, newIncident];
+    },
+    setDeleteIncidents(state, action: PayloadAction<number>) {
+      const incident = state.currentMonthIncidents.find(
+        (item) => item.id === action.payload
+      );
+
+      if (
+        !incident ||
+        !isIncidentInPeriod(incident, getCurentPeriod(state.currentDate))
+      )
+        return;
+
+      state.currentMonthIncidents = [
+        ...state.currentMonthIncidents.filter(
+          (item) => item.id !== action.payload
+        ),
+      ];
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchIncidents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchIncidents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentMonthIncidents = action.payload;
+      })
+      .addCase(fetchIncidents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
-export const { setCurrentMonthEmployees, setCurrentMonth, setCurrentYear } =
-  calendarSlice.actions;
+export const {
+  setCurrentDate,
+  setCurrentMonthIncidents,
+  setAddIncidents,
+  setUpdateIncidents,
+  setDeleteIncidents,
+} = calendarSlice.actions;
 
 export default calendarSlice.reducer;

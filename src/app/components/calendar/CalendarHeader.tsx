@@ -1,10 +1,11 @@
 import { DEFAULT_MONTH_NAMES } from "@/app/consts/calendar";
+import { CurrentDate } from "@/app/store/slices/calendarSlice";
+import { ArrowLeft, ArrowRight, ArrowUturnCcwLeft } from "@gravity-ui/icons";
 import { Button, Icon, Text } from "@gravity-ui/uikit";
-import { ArrowLeft, ArrowRight, ArrowsRotateLeft } from "@gravity-ui/icons";
 import { useMemo } from "react";
 
 interface CalendarHeaderProps {
-  currentDate: Date;
+  currentDate: CurrentDate;
   handleToday: () => void;
   handleSwitchMonth: (isPrev: boolean) => void;
 }
@@ -14,11 +15,12 @@ export const CalendarHeader = ({
   handleSwitchMonth,
 }: CalendarHeaderProps) => {
   const isCurrentMonth = useMemo(() => {
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
     const now = new Date();
 
-    return currentMonth === now.getMonth() && currentYear === now.getFullYear();
+    return (
+      currentDate.month === now.getMonth() &&
+      currentDate.year === now.getFullYear()
+    );
   }, [currentDate]);
 
   return (
@@ -34,8 +36,7 @@ export const CalendarHeader = ({
 
       <div className="flex-1 text-center mx-2">
         <Text variant="header-2" className="text-lg sm:text-2xl">
-          {DEFAULT_MONTH_NAMES[currentDate.getMonth()]}{" "}
-          {currentDate.getFullYear()}
+          {DEFAULT_MONTH_NAMES[currentDate.month]} {currentDate.year}
         </Text>
       </div>
 
@@ -45,9 +46,10 @@ export const CalendarHeader = ({
           view={isCurrentMonth ? "outlined" : "normal"}
           disabled={isCurrentMonth}
           size="l"
+          title={"Вернуться к текущему"}
           className="sm:size-xl w-12 flex justify-center items-center"
         >
-          <Icon data={ArrowsRotateLeft} size={18} />
+          <Icon data={ArrowUturnCcwLeft} size={18} />
         </Button>
         <Button
           onClick={() => handleSwitchMonth(false)}

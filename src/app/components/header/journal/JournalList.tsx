@@ -1,22 +1,36 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  useDeleteIncidentMutation,
+  useFetchIncidentsQuery,
+  useUpdateIncidentMutation,
+} from "@/app/store/api/api-incidents"; // Импортируем новые хуки
+import { setIncidents } from "@/app/store/slices/userJournalSlice";
 import { RootState } from "@/app/store/store";
 import { IIncident, IIncidentStatus } from "@/app/types/common/i-incident";
 import { IPeriod } from "@/app/types/system/i-period";
 import { formatDate } from "@/app/utils/formatDate";
-import { isIncidentInPeriod } from "@/app/utils/getIsIncidentInPeriod";
+import { getIncident } from "@/app/utils/getIncident";
 import { getStatusClass } from "@/app/utils/getStatusClass";
 import { getStatusIcon } from "@/app/utils/getStatusIcon";
+import { sortIncidents } from "@/app/utils/sortIncidents";
+import { socket } from "@/socket";
 import { Pencil, Xmark } from "@gravity-ui/icons";
-import { Button, Icon, UserLabel, Modal, Text } from "@gravity-ui/uikit";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { Button, Icon, Modal, Text, UserLabel } from "@gravity-ui/uikit";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import IcidentModal from "../../IcidentModal";
 
 interface JournalListProps {
+  handleCloseModal: () => void;
+  sortDesc: boolean;
   selectedPeriod: IPeriod;
   selectedStatuses: Record<IIncidentStatus, boolean>;
 }
 
 export const JournalList = ({
+  handleCloseModal,
+  sortDesc,
   selectedPeriod,
   selectedStatuses,
 }: JournalListProps) => {
@@ -30,22 +44,55 @@ export const JournalList = ({
   const [deletingIncidentId, setDeletingIncidentId] = useState<number | null>(
     null
   );
+  const dispatch = useDispatch();
 
-  const filteredIncidents = incidents.filter(
-    (incident) =>
-      incident.userId === Number(user?.id) &&
-      isIncidentInPeriod(incident, selectedPeriod) &&
-      selectedStatuses[incident.status]
-  );
+  // Получаем список статусов, которые выбраны
+  const activeStatuses = Object.entries(selectedStatuses)
+    .filter(([_, isSelected]) => isSelected)
+    .map(([status]) => status as IIncidentStatus);
+
+  // Используем хук для получения событий
+  const { data, error, isLoading } = useFetchIncidentsQuery({
+    userId: user?.id,
+    startDate: selectedPeriod.start,
+    endDate: selectedPeriod.end,
+    statuses: activeStatuses,
+  });
+
+  // Обновляем состояние в Redux при изменении данных
+  useEffect(() => {
+    if (data) {
+      console.log("data", data);
+      const allIncidents: IIncident[] = data.map((item: any) =>
+        getIncident(item)
+      );
+      console.log("allIncidents", allIncidents);
+      dispatch(setIncidents(data));
+    }
+  }, [data, dispatch]);
+
+  // Хуки для обновления и удаления событий
+  const [updateIncident] = useUpdateIncidentMutation();
+  const [deleteIncident] = useDeleteIncidentMutation();
 
   const handleEdit = (incident: IIncident) => {
     setEditingIncident(incident);
     setIsEditModalOpen(true);
   };
 
-  const handleSubmitEdit = (updatedIncident: IIncident) => {
-    console.log("Обновленная запись:", updatedIncident);
-    setIsEditModalOpen(false);
+  const handleSubmitEdit = async (updatedIncident: IIncident) => {
+    try {
+      const result = await updateIncident(updatedIncident).unwrap();
+
+      if (result) {
+        console.log("result", result);
+        socket.emit("incidentUpdated", result.incident);
+        setIsEditModalOpen(false);
+        handleCloseModal();
+      }
+    } catch (error) {
+      console.error("Ошибка при обновлении события:", error);
+    }
   };
 
   const handleDeleteClick = (incidentId: number) => {
@@ -53,12 +100,20 @@ export const JournalList = ({
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deletingIncidentId !== null) {
-      console.log("Удаление записи с ID:", deletingIncidentId);
+      try {
+        const result = await deleteIncident(deletingIncidentId).unwrap();
 
-      setIsDeleteModalOpen(false);
-      setDeletingIncidentId(null);
+        if (result) {
+          socket.emit("incidentDeleted", result.id);
+          setIsDeleteModalOpen(false);
+          setDeletingIncidentId(null);
+          handleCloseModal();
+        }
+      } catch (error) {
+        console.error("Ошибка при удалении события:", error);
+      }
     }
   };
 
@@ -70,7 +125,7 @@ export const JournalList = ({
   return (
     <div className="flex-1 overflow-y-auto pr-2">
       <div className="space-y-2">
-        {filteredIncidents.map((incident) => (
+        {sortIncidents(incidents, sortDesc).map((incident) => (
           <div
             key={incident.id}
             className="p-2 border rounded-lg flex justify-between items-center text-sm sm:text-base"

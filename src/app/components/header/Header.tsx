@@ -1,14 +1,14 @@
 "use client";
 import { Book, Moon, Sun } from "@gravity-ui/icons";
-import { Button, Icon, User, Popover } from "@gravity-ui/uikit";
+import { Button, Icon, Popover, User } from "@gravity-ui/uikit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../store/slices/themeSlice";
 import { logout } from "../../store/slices/userSlice";
 import { RootState } from "../../store/store";
+import AuthModal from "./AuthModal";
 import JournalModal from "./journal/JournalModal";
-import RegistrationModal from "./RegistrationModal";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -96,7 +96,7 @@ export default function Header() {
       </div>
 
       {/* Модальное окно регистрации */}
-      <RegistrationModal
+      <AuthModal
         isModalOpen={isModalOpen}
         isLoginForm={isLoginForm}
         setIsLoginForm={setIsLoginForm}

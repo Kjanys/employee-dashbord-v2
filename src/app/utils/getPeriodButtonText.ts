@@ -3,12 +3,21 @@ import { IPeriod } from "../types/system/i-period";
 // Определение текста для кнопки выбора периода
 export const getPeriodButtonText = (selectedPeriod: IPeriod) => {
   const today = new Date();
-  const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-  const endOfWeek = new Date(
-    today.setDate(today.getDate() + (6 - today.getDay()))
+  const dayOfWeek = today.getDay();
+  const startOfWeek = new Date(
+    new Date().setDate(
+      new Date().getDate() -
+        new Date().getDay() +
+        (new Date().getDay() === 0 ? -6 : 1)
+    )
   );
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-  const endOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+  console.log("startOfWeek", startOfWeek);
+  const endOfWeek = new Date(
+    today.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? 0 : 7))
+  );
+  console.log("endOfWeek", endOfWeek);
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   const startOfYear = new Date(today.getFullYear(), 0, 1);
   const endOfYear = new Date(today.getFullYear(), 11, 31);
 

@@ -8,7 +8,6 @@ export const isEmployeeInDay = (
   year: number
 ): boolean => {
   const currentDate = new Date(year, month, day);
-
   if (employee.date instanceof Date) {
     // Если дата — один день
     return (

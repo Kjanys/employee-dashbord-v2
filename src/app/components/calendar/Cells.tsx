@@ -1,3 +1,4 @@
+import { CurrentDate } from "@/app/store/slices/calendarSlice";
 import { IIncident } from "@/app/types/common/i-incident";
 import { getInitials } from "@/app/utils/getInitials";
 import { isEmployeeInDay } from "@/app/utils/getIsEmployeeInDay";
@@ -10,7 +11,7 @@ import { CalendarPopover } from "./CalendarPopover";
 interface CellsProps {
   daysInMonth: number;
   currentMonthEmployees: IIncident[];
-  currentDate: Date;
+  currentDate: CurrentDate;
   isMobile: boolean;
   popoverDay: number | null;
   popoverAnchor: HTMLElement | null;
@@ -50,12 +51,7 @@ export const Cells = ({
 
   return days.map((day) => {
     const employeesInDay = currentMonthEmployees.filter((employee) =>
-      isEmployeeInDay(
-        employee,
-        day,
-        currentDate.getMonth(),
-        currentDate.getFullYear()
-      )
+      isEmployeeInDay(employee, day, currentDate.month, currentDate.year)
     );
 
     // На мобильных устройствах показываем только одну колонку

@@ -3,22 +3,30 @@ import { getDatePeriod } from "@/app/utils/getDatePeriod";
 import { getPeriodButtonText } from "@/app/utils/getPeriodButtonText";
 import { RangeCalendar } from "@gravity-ui/date-components";
 import { dateTime, dateTimeParse } from "@gravity-ui/date-utils";
-import { Calendar } from "@gravity-ui/icons";
+import {
+  BarsAscendingAlignLeftArrowDown,
+  BarsAscendingAlignLeftArrowUp,
+  Calendar,
+} from "@gravity-ui/icons";
 import { Button, Icon, Popover, Text } from "@gravity-ui/uikit";
-import { SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface PeriodSelectorProps {
+  setSortDesc: Dispatch<SetStateAction<boolean>>;
   isPopoverOpen: boolean;
   selectedPeriod: IPeriod;
   setIsPopoverOpen: (value: SetStateAction<boolean>) => void;
   handlePeriodChange: (period: IPeriod) => void;
+  sortDesc: boolean;
 }
 
 export const PeriodSelector = ({
+  setSortDesc,
   isPopoverOpen,
   selectedPeriod,
   setIsPopoverOpen,
   handlePeriodChange,
+  sortDesc,
 }: PeriodSelectorProps) => {
   return (
     <div className="flex items-center gap-4 mb-4">
@@ -57,12 +65,16 @@ export const PeriodSelector = ({
                   handlePeriodChange({
                     start: new Date(
                       new Date().setDate(
-                        new Date().getDate() - new Date().getDay()
+                        new Date().getDate() -
+                          new Date().getDay() +
+                          (new Date().getDay() === 0 ? -6 : 1)
                       )
                     ),
                     end: new Date(
                       new Date().setDate(
-                        new Date().getDate() + (6 - new Date().getDay())
+                        new Date().getDate() -
+                          new Date().getDay() +
+                          (new Date().getDay() === 0 ? 0 : 7)
                       )
                     ),
                   })
@@ -144,6 +156,20 @@ export const PeriodSelector = ({
         {getPeriodButtonText(selectedPeriod) !== "Все" &&
           getDatePeriod(selectedPeriod)}
       </Text>
+
+      <Button
+        onClick={() => {
+          setSortDesc(!sortDesc);
+        }}
+      >
+        <Icon
+          data={
+            sortDesc
+              ? BarsAscendingAlignLeftArrowUp
+              : BarsAscendingAlignLeftArrowDown
+          }
+        />
+      </Button>
     </div>
   );
 };

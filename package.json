@@ -2,11 +2,13 @@
   "name": "employee-dashbord-v2",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently \"next dev --turbopack\" \"node server.js\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:all": "concurrently \"npm run dev\" \"npx ts-node-dev -r dotenv/config src/server.ts\""
   },
   "dependencies": {
     "@gravity-ui/date-components": "^3.0.1",
@@ -14,26 +16,41 @@
     "@gravity-ui/navigation": "^3.0.0",
     "@gravity-ui/uikit": "^7.4.0",
     "@next/env": "^15.1.7",
+    "@prisma/client": "^6.4.1",
     "@reduxjs/toolkit": "^2.5.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "framer-motion": "^12.4.7",
+    "jsonwebtoken": "^9.0.2",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
-    "react-swipeable": "^7.0.2"
+    "react-swipeable": "^7.0.2",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@gravity-ui/uikit": "^7.4.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/socket.io-client": "^1.4.36",
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.4.7",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
+    "http-proxy-middleware": "^3.0.3",
     "postcss": "^8",
+    "prisma": "^6.4.1",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5"
   }
 }

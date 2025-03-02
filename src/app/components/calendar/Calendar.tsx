@@ -1,10 +1,15 @@
 "use client";
+import {
+  CurrentDate,
+  fetchIncidents,
+  setCurrentDate,
+} from "@/app/store/slices/calendarSlice";
 import { Card } from "@gravity-ui/uikit";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSwipeable } from "react-swipeable";
-import { CALENDAR_VARIANTS } from "../../consts/calendar";
+import { CALEDAR_STOK_VALUE, CALENDAR_VARIANTS } from "../../consts/calendar";
 import { RootState } from "../../store/store";
 import { CalendarDirections } from "../../types/system/i-calendar";
 import { isEmployeeInDay } from "../../utils/getIsEmployeeInDay";
@@ -15,7 +20,7 @@ import { EptyCells } from "./EptyCells";
 import { WeekDays } from "./WeekDays";
 
 export default function Calendar() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const dispatch = useDispatch();
   const [daysInMonth, setDaysInMonth] = useState<number>(0);
   const [startDay, setStartDay] = useState<number>(0);
   const [endDay, setEndDay] = useState<number>(0);
@@ -29,10 +34,11 @@ export default function Calendar() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [cellHeight, setCellHeight] = useState<number>(0); // Высота ячейки
   const [windowHeight, setWindowHeight] = useState<number>();
-  const { currentMonthEmployees } = useSelector(
+  const { currentMonthIncidents } = useSelector(
     (state: RootState) => state.calendar
   );
-
+  const { currentDate } = useSelector((state: RootState) => state.calendar);
+  console.log("currentMonthIncidents", currentMonthIncidents);
   // Определяем, является ли устройство мобильным
   useEffect(() => {
     const handleResize = () => {
@@ -66,17 +72,14 @@ export default function Calendar() {
   });
 
   // Обновление календаря
-  const updateCalendar = (date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const updateCalendar = (date: CurrentDate) => {
+    const daysInMonth = new Date(date.year, date.month + 1, 0).getDate();
     setDaysInMonth(daysInMonth);
 
-    const startDay = new Date(year, month, 1).getDay();
+    const startDay = new Date(date.year, date.month, 1).getDay();
     setStartDay(startDay === 0 ? 6 : startDay - 1);
 
-    const endDay = new Date(year, month + 1, 0).getDay();
+    const endDay = new Date(date.year, date.month + 1, 0).getDay();
     setEndDay(endDay === 0 ? 0 : 7 - endDay);
 
     // Рассчитываем количество строк в календаре
@@ -104,14 +107,24 @@ export default function Calendar() {
   };
 
   const handleSwitchMonth = (isPrev: boolean) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newDate.getMonth() + (isPrev ? -1 : 1));
-    setCurrentDate(newDate);
+    dispatch(
+      setCurrentDate({
+        ...currentDate,
+        month: currentDate.month + (isPrev ? -1 : 1),
+      })
+    );
+    dispatch(
+      fetchIncidents({
+        ...currentDate,
+        month: currentDate.month + (isPrev ? -1 : 1),
+      })
+    );
     setDirection(isPrev ? CalendarDirections.LEFT : CalendarDirections.RIGHT);
   };
 
   const handleToday = () => {
-    setCurrentDate(new Date());
+    dispatch(setCurrentDate(CALEDAR_STOK_VALUE));
+    dispatch(fetchIncidents(CALEDAR_STOK_VALUE));
     setDirection(CalendarDirections.RIGHT);
   };
 
@@ -174,7 +187,7 @@ export default function Calendar() {
         {/* Календарь с анимацией */}
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
-            key={currentDate.toISOString()}
+            key={currentDate.month}
             custom={direction}
             variants={CALENDAR_VARIANTS}
             initial="initial"
@@ -190,7 +203,7 @@ export default function Calendar() {
             {/* Дни месяца */}
             <Cells
               daysInMonth={daysInMonth}
-              currentMonthEmployees={currentMonthEmployees}
+              currentMonthEmployees={currentMonthIncidents}
               currentDate={currentDate}
               isMobile={isMobile}
               popoverDay={popoverDay}
@@ -210,16 +223,16 @@ export default function Calendar() {
       {/* Sheet для мобильной версии */}
       <DaySheet
         day={selectedDay || 0}
-        month={currentDate.getMonth()}
-        year={currentDate.getFullYear()}
+        month={currentDate.month}
+        year={currentDate.year}
         employeesInDay={
           selectedDay !== null
-            ? currentMonthEmployees.filter((employee) =>
+            ? currentMonthIncidents.filter((employee) =>
                 isEmployeeInDay(
                   employee,
                   selectedDay,
-                  currentDate.getMonth(),
-                  currentDate.getFullYear()
+                  currentDate.month,
+                  currentDate.year
                 )
               )
             : []

@@ -1,4 +1,18 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  LOGIN_DEFAULT_FORM_VALUES,
+  REGISTER_DEFAULT_FORM_VALUES,
+} from "@/app/consts/auth";
+import {
+  LOGIN_VALIDATION_RULES,
+  REGISTER_VALIDATION_RULES,
+} from "@/app/consts/validations";
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from "@/app/store/api/api-employee";
+import { IFormState } from "@/app/types/system/i-form";
 import { CircleQuestion } from "@gravity-ui/icons";
 import {
   Button,
@@ -8,109 +22,153 @@ import {
   Text,
   TextInput,
 } from "@gravity-ui/uikit";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/slices/userSlice";
 
-interface RegistrationModalProps {
+interface AuthModalProps {
   isModalOpen: boolean;
   isLoginForm: boolean;
   setIsLoginForm: (value: SetStateAction<boolean>) => void;
   setIsModalOpen: (value: SetStateAction<boolean>) => void;
 }
 
-export default function RegistrationModal({
+export default function AuthModal({
   isModalOpen,
   isLoginForm,
   setIsLoginForm,
   setIsModalOpen,
-}: RegistrationModalProps) {
+}: AuthModalProps) {
   const dispatch = useDispatch();
 
-  const [loginValue, setLoginValue] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
-  const [key, setKey] = useState("");
+  // Состояние формы
+  const [loginForm, setLoginForm] = useState<IFormState>(
+    LOGIN_DEFAULT_FORM_VALUES
+  );
+  const [registerForm, setRegisterForm] = useState<IFormState>(
+    REGISTER_DEFAULT_FORM_VALUES
+  );
+
+  // Ошибки
   const [loginErrors, setLoginErrors] = useState<Record<string, string>>({});
   const [registerErrors, setRegisterErrors] = useState<Record<string, string>>(
     {}
   );
 
+  // RTK Query мутации
+  const [loginUser, { isLoading: isLoginLoading, error: loginError }] =
+    useLoginUserMutation();
+  const [registerUser, { isLoading: isRegisterLoading, error: registerError }] =
+    useRegisterUserMutation();
+
+  // Закрытие модального окна
   const handleModalClose = () => {
     setIsModalOpen(false);
     resetForm();
   };
 
+  // Сброс формы
   const resetForm = () => {
-    setLoginValue("");
-    setPassword("");
-    setName("");
-    setSurname("");
-    setRepeatPassword("");
-    setKey("");
+    setLoginForm(LOGIN_DEFAULT_FORM_VALUES);
+    setRegisterForm(REGISTER_DEFAULT_FORM_VALUES);
     setLoginErrors({});
     setRegisterErrors({});
   };
 
-  const validateLoginForm = () => {
-    const newErrors: Record<string, string> = {};
+  // Валидация формы
+  const validateForm = (form: IFormState, rules: Record<string, any>) => {
+    const errors: Record<string, string> = {};
 
-    if (!loginValue) newErrors.login = "Логин обязателен";
-    if (!password) newErrors.password = "Пароль обязателен";
+    for (const [field, rule] of Object.entries(rules)) {
+      const value = form[field as keyof IFormState];
 
-    setLoginErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+      if (rule.required && !value) {
+        errors[field] = rule.message;
+      }
+
+      if (rule.validate) {
+        const validationError = rule.validate(value, form);
+        if (validationError) {
+          errors[field] = validationError;
+        }
+      }
+    }
+
+    return errors;
   };
 
-  const validateRegisterForm = () => {
-    const newErrors: Record<string, string> = {};
+  // Обработчик входа
+  const handleLogin = async () => {
+    const errors = validateForm(loginForm, LOGIN_VALIDATION_RULES);
+    setLoginErrors(errors);
 
-    if (!loginValue) newErrors.login = "Логин обязателен";
-    if (!name) newErrors.name = "Имя обязательно";
-    if (!surname) newErrors.surname = "Фамилия обязательна";
-    if (!password) newErrors.password = "Пароль обязателен";
-    if (!repeatPassword) newErrors.repeatPassword = "Повторите пароль";
-    if (password !== repeatPassword)
-      newErrors.repeatPassword = "Пароли не совпадают";
-    if (!key) newErrors.key = "Ключ обязателен";
-    if (key !== process.env.NEXT_PUBLIC_REGISTRATION_KEY)
-      newErrors.key = "Неверный ключ";
+    if (Object.keys(errors).length > 0) return;
 
-    setRegisterErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    try {
+      const user = await loginUser({
+        login: loginForm.login,
+        password: loginForm.password,
+      }).unwrap();
+      localStorage.setItem("token", user.token); // Сохраняем токен
+      dispatch(login(user)); // Обновляем состояние Redux
+      handleModalClose();
+    } catch (error) {
+      setLoginErrors({ general: "Неверный логин или пароль" });
+    }
   };
 
+  // Обработчик регистрации
+  const handleRegister = async () => {
+    const errors = validateForm(registerForm, REGISTER_VALIDATION_RULES);
+    setRegisterErrors(errors);
+
+    if (Object.keys(errors).length > 0) return;
+
+    try {
+      const user = await registerUser({
+        name: registerForm.name!,
+        surname: registerForm.surname!,
+        login: registerForm.login,
+        password: registerForm.password,
+        email: registerForm.email!,
+      }).unwrap();
+      localStorage.setItem("token", user.token); // Сохраняем токен
+      dispatch(login(user)); // Обновляем состояние Redux
+      handleModalClose();
+    } catch (error) {
+      setRegisterErrors({ general: "Ошибка регистрации" });
+    }
+  };
+
+  // Обработчик отправки формы
   const handleFormSubmit = () => {
     if (isLoginForm) {
-      if (!validateLoginForm()) return;
-      // Логика входа
-      // TODO временно
-      dispatch(
-        login({
-          id: "1",
-          name: name,
-          surname: surname,
-          login: loginValue,
-        })
-      );
-      console.log("Вход:", { loginValue, password });
+      handleLogin();
     } else {
-      if (!validateRegisterForm()) return;
-      // Логика регистрации
-      // TODO временно
-      dispatch(
-        login({
-          id: "1",
-          name: name,
-          surname: surname,
-          login: loginValue,
-        })
-      );
-      console.log("Регистрация:", { loginValue, name, surname, password, key });
+      handleRegister();
     }
-    handleModalClose();
+  };
+
+  // Обработчик нажатия клавиши Enter
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        event.preventDefault(); // Предотвращаем стандартное поведение
+        handleFormSubmit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLoginForm, loginForm, registerForm]);
+
+  // Обновление состояния формы
+  const handleFormChange = (field: keyof IFormState, value: string) => {
+    if (isLoginForm) {
+      setLoginForm((prev) => ({ ...prev, [field]: value }));
+    } else {
+      setRegisterForm((prev) => ({ ...prev, [field]: value }));
+    }
   };
 
   return (
@@ -139,8 +197,8 @@ export default function RegistrationModal({
                 Логин
               </Text>
               <TextInput
-                value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
+                value={loginForm.login}
+                onChange={(e) => handleFormChange("login", e.target.value)}
                 validationState={loginErrors.login ? "invalid" : undefined}
                 errorMessage={loginErrors.login}
                 placeholder="Введите логин"
@@ -153,14 +211,17 @@ export default function RegistrationModal({
               </Text>
               <TextInput
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={loginForm.password}
+                onChange={(e) => handleFormChange("password", e.target.value)}
                 validationState={loginErrors.password ? "invalid" : undefined}
                 errorMessage={loginErrors.password}
                 placeholder="Введите пароль"
                 className="w-full"
               />
             </div>
+            {loginErrors.general && (
+              <Text color="danger">{loginErrors.general}</Text>
+            )}
           </div>
         ) : (
           // Форма регистрации
@@ -170,8 +231,8 @@ export default function RegistrationModal({
                 Логин
               </Text>
               <TextInput
-                value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
+                value={registerForm.login}
+                onChange={(e) => handleFormChange("login", e.target.value)}
                 validationState={registerErrors.login ? "invalid" : undefined}
                 errorMessage={registerErrors.login}
                 placeholder="Введите логин"
@@ -180,11 +241,24 @@ export default function RegistrationModal({
             </div>
             <div>
               <Text variant="subheader-2" className="mb-1">
+                Email
+              </Text>
+              <TextInput
+                value={registerForm.email}
+                onChange={(e) => handleFormChange("email", e.target.value)}
+                validationState={registerErrors.email ? "invalid" : undefined}
+                errorMessage={registerErrors.email}
+                placeholder="Введите email"
+                className="w-full"
+              />
+            </div>
+            <div>
+              <Text variant="subheader-2" className="mb-1">
                 Имя
               </Text>
               <TextInput
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={registerForm.name}
+                onChange={(e) => handleFormChange("name", e.target.value)}
                 validationState={registerErrors.name ? "invalid" : undefined}
                 errorMessage={registerErrors.name}
                 placeholder="Введите имя"
@@ -196,8 +270,8 @@ export default function RegistrationModal({
                 Фамилия
               </Text>
               <TextInput
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
+                value={registerForm.surname}
+                onChange={(e) => handleFormChange("surname", e.target.value)}
                 validationState={registerErrors.surname ? "invalid" : undefined}
                 errorMessage={registerErrors.surname}
                 placeholder="Введите фамилию"
@@ -210,8 +284,8 @@ export default function RegistrationModal({
               </Text>
               <TextInput
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={registerForm.password}
+                onChange={(e) => handleFormChange("password", e.target.value)}
                 validationState={
                   registerErrors.password ? "invalid" : undefined
                 }
@@ -226,8 +300,10 @@ export default function RegistrationModal({
               </Text>
               <TextInput
                 type="password"
-                value={repeatPassword}
-                onChange={(e) => setRepeatPassword(e.target.value)}
+                value={registerForm.repeatPassword}
+                onChange={(e) =>
+                  handleFormChange("repeatPassword", e.target.value)
+                }
                 validationState={
                   registerErrors.repeatPassword ? "invalid" : undefined
                 }
@@ -242,8 +318,8 @@ export default function RegistrationModal({
               </Text>
               <div className="flex items-center gap-2 h-[56px] relative">
                 <TextInput
-                  value={key}
-                  onChange={(e) => setKey(e.target.value)}
+                  value={registerForm.key}
+                  onChange={(e) => handleFormChange("key", e.target.value)}
                   validationState={registerErrors.key ? "invalid" : undefined}
                   placeholder="Введите ключ"
                   className="w-full"
@@ -263,6 +339,9 @@ export default function RegistrationModal({
                 )}
               </div>
             </div>
+            {registerErrors.general && (
+              <Text color="danger">{registerErrors.general}</Text>
+            )}
           </div>
         )}
 

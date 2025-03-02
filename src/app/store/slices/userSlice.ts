@@ -1,20 +1,13 @@
-import { User } from "@/app/types/system/i-user";
+import { IUserAnswer } from "@/app/types/system/i-user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
-  user: User | null;
+  user: IUserAnswer | null;
   isAuthenticated: boolean;
 }
 
-const MOCK_USER = {
-  id: "1",
-  name: "Иван",
-  surname: "Иванов",
-  login: "admin",
-};
-
 const initialState: UserState = {
-  user: MOCK_USER,
+  user: null,
   isAuthenticated: false,
 };
 
@@ -22,16 +15,15 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // Логин пользователя
-    login(state, action: PayloadAction<User>) {
-      state.user = MOCK_USER;
+    login(state, action: PayloadAction<IUserAnswer>) {
+      state.user = action.payload;
       state.isAuthenticated = true;
-      console.log("action.payload", action.payload);
+      localStorage.setItem("token", action.payload.token);
     },
-    // Логаут пользователя
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
+      localStorage.removeItem("token");
     },
   },
 });

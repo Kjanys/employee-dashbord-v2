@@ -33,3 +33,8 @@ export const CALENDAR_VARIANTS = {
     transition: { duration: 0.3 },
   }),
 };
+
+export const CALEDAR_STOK_VALUE = {
+  month: new Date().getMonth(),
+  year: new Date().getFullYear(),
+};
