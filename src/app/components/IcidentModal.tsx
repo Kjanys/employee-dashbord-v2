@@ -1,20 +1,22 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 "use client";
 import { Calendar, RangeCalendar } from "@gravity-ui/date-components";
 import { dateTime, dateTimeParse } from "@gravity-ui/date-utils";
 import { Button, Checkbox, Modal, Text } from "@gravity-ui/uikit";
 import { SetStateAction, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { DICT_STATUS } from "../consts/journal";
+import { RootState } from "../store/store";
 import { IIncident, IIncidentStatus } from "../types/common/i-incident";
 import { IError } from "../types/system/i-eror";
 import { IPeriod } from "../types/system/i-period";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
 
 interface IcidentModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (value: SetStateAction<boolean>) => void;
   handleSubmit: (incident: IIncident) => void;
   title: string;
+  isLoading?: boolean;
   initialData?: IIncident | null;
 }
 
@@ -23,6 +25,7 @@ export default function IcidentModal({
   setIsModalOpen,
   handleSubmit,
   title,
+  isLoading,
   initialData,
 }: IcidentModalProps) {
   const [isPeriod, setIsPeriod] = useState(false);
@@ -41,12 +44,15 @@ export default function IcidentModal({
   // Инициализация состояния при открытии модального окна
   useEffect(() => {
     if (initialData) {
-      setIsPeriod(initialData.date instanceof Date ? false : true);
-      setSelectedDate(
-        initialData.date instanceof Date ? initialData.date : null
-      );
+      setIsPeriod(!initialData.isPeriod ? false : true);
+      setSelectedDate(!initialData.isPeriod ? initialData.date : null);
       setSelectedRange(
-        initialData.date instanceof Date ? null : initialData.date
+        !initialData.isPeriod
+          ? null
+          : {
+              startDate: initialData.startDate!,
+              endDate: initialData.endDate!,
+            }
       );
       setSelectedStatus(initialData.status);
     } else {
@@ -87,7 +93,10 @@ export default function IcidentModal({
       name: user!.name,
       surname: user!.surname,
       status: selectedStatus!,
-      date: isPeriod ? selectedRange! : selectedDate!,
+      date: isPeriod ? null : selectedDate!,
+      isPeriod: isPeriod,
+      startDate: isPeriod ? selectedRange?.startDate! : null,
+      endDate: isPeriod ? selectedRange?.endDate! : null,
     };
 
     handleSubmit(newIncident);
@@ -107,16 +116,16 @@ export default function IcidentModal({
             <RangeCalendar
               value={{
                 start: selectedRange
-                  ? dateTime({ input: selectedRange.start })
+                  ? dateTime({ input: selectedRange.startDate })
                   : dateTime({ input: new Date() }),
                 end: selectedRange
-                  ? dateTime({ input: selectedRange.end })
+                  ? dateTime({ input: selectedRange.endDate })
                   : dateTime({ input: new Date() }),
               }}
               onUpdate={(value) =>
                 setSelectedRange({
-                  start: dateTimeParse(value.start)?.toDate() || new Date(),
-                  end:
+                  startDate: dateTimeParse(value.start)?.toDate() || new Date(),
+                  endDate:
                     dateTimeParse(value.end)?.toDate() ||
                     dateTimeParse(value.start)?.toDate() ||
                     new Date(),
@@ -180,7 +189,7 @@ export default function IcidentModal({
           >
             Период
           </Checkbox>
-          <Button onClick={submit} view="action">
+          <Button onClick={submit} view="action" loading={isLoading}>
             Подтвердить
           </Button>
         </div>

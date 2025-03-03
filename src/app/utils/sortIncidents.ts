@@ -3,14 +3,9 @@ import { IIncident } from "../types/common/i-incident";
 export const sortIncidents = (incidents: IIncident[], sortDesc: boolean) => {
   if (!incidents.length) return [];
 
-  console.log("incidents", incidents);
-  return incidents.sort((a, b) => {
-    console.log("a", a);
-    console.log("b", b);
-    // Получаем дату для первого события
-    const dateA = a.date instanceof Date ? a.date : a.date.start;
-    // Получаем дату для второго события
-    const dateB = b.date instanceof Date ? b.date : b.date.start;
+  return incidents.slice().sort((a, b) => {
+    const dateA = !a.isPeriod ? new Date(a.date!) : new Date(a.startDate!);
+    const dateB = !b.isPeriod ? new Date(b.date!) : new Date(b.startDate!);
 
     // Сравниваем даты
     if (sortDesc) {

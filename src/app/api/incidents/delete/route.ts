@@ -1,6 +1,30 @@
 import prisma from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/incidents/delete:
+ *   delete:
+ *     summary: Удалить событие
+ *     description: Удаляет событие по его ID.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Событие успешно удалено
+ *       404:
+ *         description: Событие не найдено
+ *       500:
+ *         description: Ошибка сервера
+ */
+
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();

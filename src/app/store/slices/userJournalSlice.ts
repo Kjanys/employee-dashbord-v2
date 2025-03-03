@@ -13,20 +13,12 @@ const userJournalSlice = createSlice({
   name: "userJournal",
   initialState,
   reducers: {
-    updateIncident(state, action: PayloadAction<IIncident>) {
-      const index = state.incidents.findIndex(
-        (incident) => incident.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.incidents[index] = action.payload;
-      }
-    },
     setIncidents(state, action: PayloadAction<IIncident[]>) {
       state.incidents = action.payload;
     },
   },
 });
 
-export const { updateIncident, setIncidents } = userJournalSlice.actions;
+export const { setIncidents } = userJournalSlice.actions;
 
 export default userJournalSlice.reducer;

@@ -5,7 +5,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import ClientThemeProvider from "./components/ClientThemeProvider";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -32,11 +31,9 @@ export default function RootLayout({
       </head>
       <body className={`${nunito.className} h-full`}>
         <Providers>
-          <ClientThemeProvider>
-            {children}
-            <Analytics />
-            <SpeedInsights />
-          </ClientThemeProvider>
+          {children}
+          <Analytics />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>

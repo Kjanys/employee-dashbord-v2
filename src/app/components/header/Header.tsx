@@ -1,6 +1,6 @@
 "use client";
-import { Book, Moon, Sun } from "@gravity-ui/icons";
-import { Button, Icon, Popover, User } from "@gravity-ui/uikit";
+import { Book, Moon, Person, Sun } from "@gravity-ui/icons";
+import { Avatar, Button, Icon, Popover, Text } from "@gravity-ui/uikit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,7 +47,7 @@ export default function Header() {
       <div className="text-xl font-semibold">Календарь</div>
       <div className="flex items-center gap-4">
         {/* Переключатель темы */}
-        <Button onClick={handleToggleTheme} view="raised">
+        <Button className="ml-6" onClick={handleToggleTheme} view="raised">
           <Icon data={theme === "light" ? Moon : Sun} />
         </Button>
 
@@ -74,18 +74,18 @@ export default function Header() {
           >
             <div
               onClick={() => setIsPopoverOpen(!isPopoverOpen)}
-              className="cursor-pointer"
+              className="flex cursor-pointer justify-center items-center md:text-end"
             >
-              <User
-                avatar={{
-                  text: "AS",
-                  theme: "brand",
-                  title: `${user.name + " " + user.surname}`,
-                  backgroundColor: "var(--g-color-private-blue-650-solid)",
-                }}
-                name={`${user.name + " " + user.surname}`}
+              <Avatar
+                className="mr-2 !hidden lg:!inline-flex"
+                icon={Person}
+                theme="brand"
+                view="filled"
                 size="m"
               />
+              <Text className="text-end !w-fit">{`${
+                user.name + " " + user.surname
+              }`}</Text>
             </div>
           </Popover>
         ) : (

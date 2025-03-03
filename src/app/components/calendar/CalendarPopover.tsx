@@ -28,31 +28,36 @@ export const CalendarPopover = ({
   return (
     <div className="mt-auto flex justify-center">
       <Popover
+        className="!border-[--g-color-private-blue-350]"
         open={popoverDay === day && Boolean(popoverAnchor)}
         onOpenChange={handleClosePopover}
         content={
-          <div className="grid grid-cols-2 gap-1 p-1">
+          <div className="bg-[--g-color-private-black-400] grid grid-cols-1 gap-1 p-1">
             {invisibleEmployees.map((employee) => (
-              <UserLabel
+              <div
                 key={employee.id}
-                type="person"
-                avatar={{
-                  icon: getStatusIcon(employee.status),
-                }}
-                size="m"
-                description={employee.name}
-                text={employee.name + " " + employee.surname}
-                style={{
-                  ...getStatusClass(employee.status),
-                }}
-              />
+                title={employee.name + " " + employee.surname}
+              >
+                <UserLabel
+                  type="person"
+                  avatar={{
+                    icon: getStatusIcon(employee.status),
+                  }}
+                  size="m"
+                  description={employee.name}
+                  text={employee.name + " " + employee.surname}
+                  style={{
+                    ...getStatusClass(employee.status),
+                  }}
+                />
+              </div>
             ))}
           </div>
         }
       >
         <Button
           view="flat"
-          size="m"
+          size={isMobile ? "xs" : "m"}
           onClick={(e) => (isMobile ? null : handleOpenPopover(e, day))}
         >
           +{invisibleEmployees.length}

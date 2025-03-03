@@ -11,39 +11,38 @@ export const getPeriodButtonText = (selectedPeriod: IPeriod) => {
         (new Date().getDay() === 0 ? -6 : 1)
     )
   );
-  console.log("startOfWeek", startOfWeek);
   const endOfWeek = new Date(
     today.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? 0 : 7))
   );
-  console.log("endOfWeek", endOfWeek);
+
   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   const startOfYear = new Date(today.getFullYear(), 0, 1);
   const endOfYear = new Date(today.getFullYear(), 11, 31);
 
   if (
-    selectedPeriod.start.toDateString() === new Date().toDateString() &&
-    selectedPeriod.end.toDateString() === new Date().toDateString()
+    selectedPeriod.startDate.toDateString() === new Date().toDateString() &&
+    selectedPeriod.endDate.toDateString() === new Date().toDateString()
   ) {
     return "Текущий день";
   } else if (
-    selectedPeriod.start.toDateString() === startOfWeek.toDateString() &&
-    selectedPeriod.end.toDateString() === endOfWeek.toDateString()
+    selectedPeriod.startDate.toDateString() === startOfWeek.toDateString() &&
+    selectedPeriod.endDate.toDateString() === endOfWeek.toDateString()
   ) {
     return "Текущая неделя";
   } else if (
-    selectedPeriod.start.toDateString() === startOfMonth.toDateString() &&
-    selectedPeriod.end.toDateString() === endOfMonth.toDateString()
+    selectedPeriod.startDate.toDateString() === startOfMonth.toDateString() &&
+    selectedPeriod.endDate.toDateString() === endOfMonth.toDateString()
   ) {
     return "Текущий месяц";
   } else if (
-    selectedPeriod.start.toDateString() === startOfYear.toDateString() &&
-    selectedPeriod.end.toDateString() === endOfYear.toDateString()
+    selectedPeriod.startDate.toDateString() === startOfYear.toDateString() &&
+    selectedPeriod.endDate.toDateString() === endOfYear.toDateString()
   ) {
     return "Текущий год";
   } else if (
-    selectedPeriod.start.getTime() === new Date(0).getTime() &&
-    selectedPeriod.end.toDateString() === endOfYear.toDateString()
+    selectedPeriod.startDate.getTime() === new Date(0).getTime() &&
+    selectedPeriod.endDate.toDateString() === endOfYear.toDateString()
   ) {
     return "Все";
   } else {

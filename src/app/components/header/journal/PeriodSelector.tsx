@@ -40,12 +40,12 @@ export const PeriodSelector = ({
                 view="flat"
                 onClick={() =>
                   handlePeriodChange({
-                    start: new Date(
+                    startDate: new Date(
                       new Date().getFullYear(),
                       new Date().getMonth(),
                       new Date().getDate()
                     ),
-                    end: new Date(
+                    endDate: new Date(
                       new Date().getFullYear(),
                       new Date().getMonth(),
                       new Date().getDate(),
@@ -63,14 +63,14 @@ export const PeriodSelector = ({
                 view="flat"
                 onClick={() =>
                   handlePeriodChange({
-                    start: new Date(
+                    startDate: new Date(
                       new Date().setDate(
                         new Date().getDate() -
                           new Date().getDay() +
                           (new Date().getDay() === 0 ? -6 : 1)
                       )
                     ),
-                    end: new Date(
+                    endDate: new Date(
                       new Date().setDate(
                         new Date().getDate() -
                           new Date().getDay() +
@@ -86,12 +86,12 @@ export const PeriodSelector = ({
                 view="flat"
                 onClick={() =>
                   handlePeriodChange({
-                    start: new Date(
+                    startDate: new Date(
                       new Date().getFullYear(),
                       new Date().getMonth(),
                       1
                     ),
-                    end: new Date(
+                    endDate: new Date(
                       new Date().getFullYear(),
                       new Date().getMonth() + 1,
                       0
@@ -105,8 +105,8 @@ export const PeriodSelector = ({
                 view="flat"
                 onClick={() =>
                   handlePeriodChange({
-                    start: new Date(new Date().getFullYear(), 0, 1),
-                    end: new Date(new Date().getFullYear(), 11, 31),
+                    startDate: new Date(new Date().getFullYear(), 0, 1),
+                    endDate: new Date(new Date().getFullYear(), 11, 31),
                   })
                 }
               >
@@ -116,8 +116,8 @@ export const PeriodSelector = ({
                 view="flat"
                 onClick={() =>
                   handlePeriodChange({
-                    start: new Date(0),
-                    end: new Date(new Date().getFullYear(), 11, 31),
+                    startDate: new Date(0),
+                    endDate: new Date(new Date().getFullYear(), 11, 31),
                   })
                 }
               >
@@ -125,16 +125,17 @@ export const PeriodSelector = ({
               </Button>
               <RangeCalendar
                 value={{
-                  start: dateTime({ input: selectedPeriod.start }),
-                  end: dateTime({ input: selectedPeriod.end }),
+                  start: dateTime({ input: selectedPeriod.startDate }),
+                  end: dateTime({ input: selectedPeriod.endDate }),
                 }}
                 maxValue={dateTime({
                   input: new Date(new Date().getFullYear(), 11, 31),
                 })}
                 onUpdate={(value) =>
                   handlePeriodChange({
-                    start: dateTimeParse(value.start)?.toDate() || new Date(),
-                    end:
+                    startDate:
+                      dateTimeParse(value.start)?.toDate() || new Date(),
+                    endDate:
                       dateTimeParse(value.end)?.toDate() ||
                       dateTimeParse(value.start)?.toDate() ||
                       new Date(),
@@ -165,8 +166,8 @@ export const PeriodSelector = ({
         <Icon
           data={
             sortDesc
-              ? BarsAscendingAlignLeftArrowUp
-              : BarsAscendingAlignLeftArrowDown
+              ? BarsAscendingAlignLeftArrowDown
+              : BarsAscendingAlignLeftArrowUp
           }
         />
       </Button>

@@ -32,20 +32,20 @@ export default function Calendar() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [cellHeight, setCellHeight] = useState<number>(0); // Высота ячейки
+  const [cellHeight, setCellHeight] = useState<number>(0);
   const [windowHeight, setWindowHeight] = useState<number>();
   const { currentMonthIncidents } = useSelector(
     (state: RootState) => state.calendar
   );
   const { currentDate } = useSelector((state: RootState) => state.calendar);
-  console.log("currentMonthIncidents", currentMonthIncidents);
+
   // Определяем, является ли устройство мобильным
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640); // 640px — breakpoint для мобильных устройств
     };
 
-    handleResize(); // Проверяем при загрузке
+    handleResize();
     window?.addEventListener("resize", handleResize);
     return () => window?.removeEventListener("resize", handleResize);
   }, []);
@@ -195,7 +195,7 @@ export default function Calendar() {
             exit="exit"
             id="calendar-cells"
             className="grid grid-cols-7 gap-1 sm:gap-2 flex-1 overflow-hidden"
-            style={{ gridAutoRows: cellHeight }} // Динамическая высота строк
+            style={{ gridAutoRows: cellHeight }}
           >
             {/* Пустые ячейки в начале */}
             <EptyCells daysNumber={startDay} />
@@ -211,7 +211,7 @@ export default function Calendar() {
               handleDayClick={handleDayClick}
               handleClosePopover={handleClosePopover}
               handleOpenPopover={handleOpenPopover}
-              cellHeight={cellHeight} // Передаем высоту ячейки
+              cellHeight={cellHeight}
             />
 
             {/* Пустые ячейки в конце */}

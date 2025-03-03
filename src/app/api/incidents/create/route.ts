@@ -1,15 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/app/lib/prisma";
-import { getIncident } from "@/app/utils/getIncident";
 import { NextResponse } from "next/server";
+
+/**
+ * @swagger
+ * /api/incidents/create:
+ *   post:
+ *     summary: Создать новое событие
+ *     description: Создает новое событие.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/IncidentCreatePayload'
+ *     responses:
+ *       201:
+ *         description: Событие успешно создано
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Incident'
+ *       500:
+ *         description: Ошибка сервера
+ */
 
 export async function POST(request: Request, res: any) {
   try {
-    const { userId, name, surname, status, date } = await request.json();
+    const {
+      userId,
+      name,
+      surname,
+      status,
+      date,
+      isPeriod,
+      startDate,
+      endDate,
+    } = await request.json();
 
-    // Определяем, является ли событие периодом
-    const isPeriod = !!date.start; // Если есть date.start, то это период
-    console.log("isPeriod", isPeriod);
     // Создаем новое событие
     const newIncident = await prisma.incident.create({
       data: {
@@ -17,17 +45,17 @@ export async function POST(request: Request, res: any) {
         name,
         surname,
         status,
-        isPeriod, // Передаем булево значение
-        date: isPeriod ? null : date, // Если это период, date = null
-        startDate: isPeriod ? date.start : null, // Если это период, startDate = date.start
-        endDate: isPeriod ? date.end : null, // Если это период, endDate = date.end
+        isPeriod,
+        date: isPeriod ? null : date,
+        startDate: isPeriod ? startDate : null,
+        endDate: isPeriod ? endDate : null,
       },
     });
 
     return NextResponse.json(
       {
         message: "Событие успешно создано",
-        incident: getIncident(newIncident),
+        incident: newIncident,
       },
       { status: 201 }
     );

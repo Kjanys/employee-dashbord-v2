@@ -1,8 +1,40 @@
 import prisma from "@/app/lib/prisma";
-import { IUserAnswer } from "@/app/types/system/i-user";
+import { IUserAnswer } from "@/app/types/common/i-user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Вход пользователя
+ *     description: Авторизует пользователя и возвращает токен.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               login:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Успешный вход
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserAnswer'
+ *       404:
+ *         description: Пользователь не найден
+ *       401:
+ *         description: Неверный пароль
+ *       500:
+ *         description: Ошибка сервера
+ */
 
 export async function POST(request: Request) {
   try {

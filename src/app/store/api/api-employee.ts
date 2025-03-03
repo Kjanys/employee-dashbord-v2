@@ -4,7 +4,7 @@ import {
   IUserAnswer,
   IUserLoginPayload,
   IUserRegistrationPayload,
-} from "../../types/system/i-user";
+} from "../../types/common/i-user";
 
 export const EmployeeApi = createApi({
   reducerPath: "employee-api",

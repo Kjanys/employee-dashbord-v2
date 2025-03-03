@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { toaster } from "@/app/providers";
 import {
   useDeleteIncidentMutation,
   useFetchIncidentsQuery,
@@ -10,7 +11,6 @@ import { RootState } from "@/app/store/store";
 import { IIncident, IIncidentStatus } from "@/app/types/common/i-incident";
 import { IPeriod } from "@/app/types/system/i-period";
 import { formatDate } from "@/app/utils/formatDate";
-import { getIncident } from "@/app/utils/getIncident";
 import { getStatusClass } from "@/app/utils/getStatusClass";
 import { getStatusIcon } from "@/app/utils/getStatusIcon";
 import { sortIncidents } from "@/app/utils/sortIncidents";
@@ -54,19 +54,25 @@ export const JournalList = ({
   // Используем хук для получения событий
   const { data, error, isLoading } = useFetchIncidentsQuery({
     userId: user?.id,
-    startDate: selectedPeriod.start,
-    endDate: selectedPeriod.end,
+    startDate: new Date(selectedPeriod.startDate.setHours(0, 0, 0, 0)),
+    endDate: new Date(selectedPeriod.endDate.setHours(23, 59, 59, 59)),
     statuses: activeStatuses,
   });
 
-  // Обновляем состояние в Redux при изменении данных
+  useEffect(() => {
+    if (!error) return;
+
+    toaster.add({
+      title: "Ошибка при загрузке событий журнала",
+      name: "getJournalError",
+      theme: "danger",
+      isClosable: true,
+      content: error.message,
+    });
+  }, [error]);
+
   useEffect(() => {
     if (data) {
-      console.log("data", data);
-      const allIncidents: IIncident[] = data.map((item: any) =>
-        getIncident(item)
-      );
-      console.log("allIncidents", allIncidents);
       dispatch(setIncidents(data));
     }
   }, [data, dispatch]);
@@ -85,13 +91,21 @@ export const JournalList = ({
       const result = await updateIncident(updatedIncident).unwrap();
 
       if (result) {
-        console.log("result", result);
         socket.emit("incidentUpdated", result.incident);
         setIsEditModalOpen(false);
         handleCloseModal();
       }
     } catch (error) {
+      toaster.add({
+        title: "Ошибка при обновлении события",
+        name: "getUpdateError",
+        theme: "danger",
+        isClosable: true,
+        content: error.message,
+      });
       console.error("Ошибка при обновлении события:", error);
+      setIsEditModalOpen(false);
+      handleCloseModal();
     }
   };
 
@@ -112,6 +126,13 @@ export const JournalList = ({
           handleCloseModal();
         }
       } catch (error) {
+        toaster.add({
+          title: "Ошибка при удалении события",
+          name: "getDeleteError",
+          theme: "danger",
+          isClosable: true,
+          content: error.message,
+        });
         console.error("Ошибка при удалении события:", error);
       }
     }
@@ -139,10 +160,10 @@ export const JournalList = ({
                 size="s"
                 description={`${incident.name} ${incident.surname}`}
                 text={
-                  incident.date instanceof Date
-                    ? formatDate(incident.date)
-                    : `${formatDate(incident.date.start)} - ${formatDate(
-                        incident.date.end
+                  !incident.isPeriod
+                    ? formatDate(incident.date!)
+                    : `${formatDate(incident.startDate!)} - ${formatDate(
+                        incident.endDate!
                       )}`
                 }
                 style={{

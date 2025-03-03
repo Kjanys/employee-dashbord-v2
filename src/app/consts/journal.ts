@@ -1,4 +1,5 @@
 import { IIncidentStatus } from "../types/common/i-incident";
+import { IPeriod } from "../types/system/i-period";
 
 export const DICT_STATUS = {
   [IIncidentStatus.REMOTE]: {
@@ -31,7 +32,7 @@ export const DEFAULT_SELECTED_STATUS = {
   [IIncidentStatus.OTHER]: true,
 };
 
-export const DEFAULT_JOURNAL_PERIOD = {
-  start: new Date(new Date().getFullYear(), new Date().getMonth(), 1), // Начало текущего месяца
-  end: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0), // Конец текущего месяца
+export const DEFAULT_JOURNAL_PERIOD: IPeriod = {
+  startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1), // Начало текущего месяца
+  endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0), // Конец текущего месяца
 };

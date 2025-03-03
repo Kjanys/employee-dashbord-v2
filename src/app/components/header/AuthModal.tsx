@@ -109,8 +109,8 @@ export default function AuthModal({
         login: loginForm.login,
         password: loginForm.password,
       }).unwrap();
-      localStorage.setItem("token", user.token); // Сохраняем токен
-      dispatch(login(user)); // Обновляем состояние Redux
+      localStorage.setItem("token", user.token);
+      dispatch(login(user));
       handleModalClose();
     } catch (error) {
       setLoginErrors({ general: "Неверный логин или пароль" });
@@ -132,8 +132,8 @@ export default function AuthModal({
         password: registerForm.password,
         email: registerForm.email!,
       }).unwrap();
-      localStorage.setItem("token", user.token); // Сохраняем токен
-      dispatch(login(user)); // Обновляем состояние Redux
+      localStorage.setItem("token", user.token);
+      dispatch(login(user));
       handleModalClose();
     } catch (error) {
       setRegisterErrors({ general: "Ошибка регистрации" });

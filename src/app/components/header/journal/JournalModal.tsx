@@ -20,7 +20,7 @@ export default function JournalModal({
   isModalOpen,
   setIsModalOpen,
 }: JournalModalProps) {
-  const [sortDesc, setSortDesc] = useState(false);
+  const [sortDesc, setSortDesc] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState<IPeriod>(
     DEFAULT_JOURNAL_PERIOD
   );
@@ -37,7 +37,6 @@ export default function JournalModal({
 
   // Обработчик выбора периода
   const handlePeriodChange = (period: IPeriod) => {
-    console.log("period", period);
     setSelectedPeriod(period);
     setIsPopoverOpen(false);
   };

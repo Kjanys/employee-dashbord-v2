@@ -1,9 +1,8 @@
-'use client';
-import { Sheet, UserLabel } from '@gravity-ui/uikit';
-import { IIncident } from '../types/common/i-incident';
-import { getStatusClass } from '../utils/getStatusClass';
-import { getStatusIcon } from '../utils/getStatusIcon';
-
+"use client";
+import { Sheet, UserLabel } from "@gravity-ui/uikit";
+import { IIncident } from "../types/common/i-incident";
+import { getStatusClass } from "../utils/getStatusClass";
+import { getStatusIcon } from "../utils/getStatusIcon";
 
 interface DaySheetProps {
   day: number;
@@ -14,11 +13,18 @@ interface DaySheetProps {
   onClose: () => void;
 }
 
-export default function DaySheet({ day, month, year, employeesInDay, visible, onClose }: DaySheetProps) {
-  const formattedDate = new Date(year, month, day).toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+export default function DaySheet({
+  day,
+  month,
+  year,
+  employeesInDay,
+  visible,
+  onClose,
+}: DaySheetProps) {
+  const formattedDate = new Date(year, month, day).toLocaleDateString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
   return (

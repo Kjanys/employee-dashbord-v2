@@ -1,10 +1,40 @@
 import prisma from "@/app/lib/prisma";
-import { getIncident } from "@/app/utils/getIncident";
 import { NextResponse } from "next/server";
+
+/**
+ * @swagger
+ * /api/incidents/update:
+ *   put:
+ *     summary: Обновить событие
+ *     description: Обновляет событие по его ID.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/IncidentUpdatePayload'
+ *     responses:
+ *       200:
+ *         description: Событие успешно обновлено
+ *       404:
+ *         description: Событие не найдено
+ *       500:
+ *         description: Ошибка сервера
+ */
 
 export async function PUT(request: Request) {
   try {
-    const { id, userId, name, surname, status, date } = await request.json();
+    const {
+      id,
+      userId,
+      name,
+      surname,
+      status,
+      date,
+      isPeriod,
+      startDate,
+      endDate,
+    } = await request.json();
 
     // Проверяем, существует ли событие
     const existingIncident = await prisma.incident.findUnique({
@@ -18,9 +48,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Определяем, является ли событие периодом
-    const isPeriod = !!date.start; // Если есть date.start, то это период
-
     // Обновляем событие
     const updatedIncident = await prisma.incident.update({
       where: { id },
@@ -29,17 +56,17 @@ export async function PUT(request: Request) {
         name,
         surname,
         status,
-        isPeriod, // Передаем булево значение
-        date: isPeriod ? null : date, // Если это период, date = null
-        startDate: isPeriod ? date.start : null, // Если это период, startDate = date.start
-        endDate: isPeriod ? date.end : null, // Если это период, endDate = date.end
+        isPeriod,
+        date: isPeriod ? null : date,
+        startDate: isPeriod ? startDate : null,
+        endDate: isPeriod ? endDate : null,
       },
     });
 
     return NextResponse.json(
       {
         message: "Событие успешно обновлено",
-        incident: getIncident(updatedIncident),
+        incident: updatedIncident,
       },
       { status: 200 }
     );

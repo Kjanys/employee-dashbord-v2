@@ -2,10 +2,12 @@
 import next from "next";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import dotenv from "dotenv";
+dotenv.config();
 
 const dev = process.env.NODE_ENV !== "production";
-const hostname = "localhost";
-const port = 3001;
+const hostname = process.env.WEBSOCKET_HOST_NAME;
+const port = process.env.WEBSOCKET_PORT_NAME;
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
@@ -16,7 +18,7 @@ app.prepare().then(() => {
   const io = new Server(httpServer, {
     path: "/socket/",
     cors: {
-      origin: "http://localhost:3000",
+      origin: process.env.WEBSOCKET_ORIGIN_URL,
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,
     },
@@ -32,7 +34,6 @@ app.prepare().then(() => {
       socket.emit("incidentUpdatedRecive", incident);
     });
     socket.on("incidentDeleted", (id) => {
-      console.log("ADD DELETE INCIDENT", id);
       socket.emit("incidentDeletedRecive", id);
     });
   });

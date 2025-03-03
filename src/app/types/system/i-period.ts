@@ -1,4 +1,4 @@
 export type IPeriod = {
-  start: Date;
-  end: Date;
+  startDate: Date;
+  endDate: Date;
 };

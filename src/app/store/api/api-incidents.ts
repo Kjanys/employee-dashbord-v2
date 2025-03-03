@@ -1,11 +1,11 @@
-// store/api/api-incidents.ts
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IIncident, IIncidentStatus } from "../../types/common/i-incident";
-import { MethodType } from "../../types/system/i-query";
 import {
   IIncidentDeletePayload,
   IIncidentPayload,
 } from "@/app/types/system/i-incident";
+import { getConvertDate } from "@/app/utils/getConvertDate";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { IIncident, IIncidentStatus } from "../../types/common/i-incident";
+import { MethodType } from "../../types/system/i-query";
 
 export const IncidentsApi = createApi({
   reducerPath: "incidents-api",
@@ -37,6 +37,8 @@ export const IncidentsApi = createApi({
         method: MethodType.POST,
         body: { userId, startDate, endDate, statuses },
       }),
+      transformResponse: (response: IIncident[]) =>
+        response.map((item: IIncident) => getConvertDate(item)),
       providesTags: ["Incident"],
     }),
 
@@ -47,6 +49,10 @@ export const IncidentsApi = createApi({
         method: MethodType.POST,
         body: newIncident,
       }),
+      transformResponse: (response: IIncidentPayload) => ({
+        ...response,
+        incident: getConvertDate(response.incident),
+      }),
       invalidatesTags: ["Incident"],
     }),
 
@@ -56,6 +62,10 @@ export const IncidentsApi = createApi({
         url: `/incidents/update`,
         method: MethodType.PUT,
         body: updatedIncident,
+      }),
+      transformResponse: (response: IIncidentPayload) => ({
+        ...response,
+        incident: getConvertDate(response.incident),
       }),
       invalidatesTags: ["Incident"],
     }),

@@ -1,4 +1,4 @@
-import { IUserAnswer } from "@/app/types/system/i-user";
+import { IUserAnswer } from "@/app/types/common/i-user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {

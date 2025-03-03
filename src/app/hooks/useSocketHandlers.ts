@@ -8,7 +8,6 @@ import {
   setUpdateIncidents,
 } from "../store/slices/calendarSlice";
 import { IIncident } from "../types/common/i-incident";
-import { getIncident } from "../utils/getIncident";
 
 export const useSocketHandlers = () => {
   const dispatch = useDispatch();
@@ -30,7 +29,6 @@ export const useSocketHandlers = () => {
     socket.on("disconnect", onDisconnect);
 
     socket.on("incidentUpdatedRecive", (updatedIncident: IIncident) => {
-      console.log("AAAA", updatedIncident);
       dispatch(setUpdateIncidents(updatedIncident));
     });
 
@@ -39,8 +37,7 @@ export const useSocketHandlers = () => {
     });
 
     socket.on("incidentAddRecive", (addedIncident: IIncident) => {
-      const newData = getIncident(addedIncident);
-      dispatch(setAddIncidents(newData));
+      dispatch(setAddIncidents(addedIncident));
     });
 
     return () => {

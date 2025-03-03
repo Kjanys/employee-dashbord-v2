@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CALEDAR_STOK_VALUE } from "@/app/consts/calendar";
+import { toaster } from "@/app/providers";
+import { getConvertDate } from "@/app/utils/getConvertDate";
+import { getCurentPeriod } from "@/app/utils/getCurentPeriod";
+import { isIncidentInPeriod } from "@/app/utils/getIsIncidentInPeriod";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IIncident } from "../../types/common/i-incident";
-import { isIncidentInPeriod } from "@/app/utils/getIsIncidentInPeriod";
-import { getCurentPeriod } from "@/app/utils/getCurentPeriod";
-import { getIncident } from "@/app/utils/getIncident";
 
 export type CurrentDate = {
   month: number;
@@ -39,17 +40,18 @@ export const fetchIncidents = createAsyncThunk(
 
       const data = await response.json();
 
-      const incidents = data.map((incident: any) => ({
-        ...incident,
-        date: !incident.date.start
-          ? new Date(incident.date)
-          : {
-              start: new Date(incident.date.start),
-              end: new Date(incident.date.end),
-            },
-      }));
+      const incidents = data.map((incident: IIncident) =>
+        getConvertDate(incident)
+      );
       return incidents;
     } catch (error) {
+      toaster.add({
+        title: "Ошбка получения записей",
+        name: "getAllError",
+        theme: "danger",
+        isClosable: true,
+        content: error.message,
+      });
       return rejectWithValue(error.message);
     }
   }
@@ -69,26 +71,27 @@ const calendarSlice = createSlice({
       state.currentMonthIncidents = action.payload;
     },
     setAddIncidents(state, action: PayloadAction<IIncident>) {
+      console.log("NEW INCIDENT", action.payload);
       if (
         !isIncidentInPeriod(action.payload, getCurentPeriod(state.currentDate))
       )
         return;
-
+      console.log("AAAAA");
       state.currentMonthIncidents = [
         ...state.currentMonthIncidents,
         action.payload,
       ];
     },
     setUpdateIncidents(state, action: PayloadAction<IIncident>) {
-      const newIncident = getIncident(action.payload);
-
-      if (!isIncidentInPeriod(newIncident, getCurentPeriod(state.currentDate)))
+      if (
+        !isIncidentInPeriod(action.payload, getCurentPeriod(state.currentDate))
+      )
         return;
 
       const filtredIncidents = state.currentMonthIncidents.filter(
         (item) => item.id !== action.payload.id
       );
-      state.currentMonthIncidents = [...filtredIncidents, newIncident];
+      state.currentMonthIncidents = [...filtredIncidents, action.payload];
     },
     setDeleteIncidents(state, action: PayloadAction<number>) {
       const incident = state.currentMonthIncidents.find(

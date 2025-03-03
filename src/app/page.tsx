@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { settings } from "@gravity-ui/date-utils";
-import { configure } from "@gravity-ui/uikit";
-import { useEffect } from "react";
+import { configure, ToasterComponent } from "@gravity-ui/uikit";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import AddIncidentButton from "./components/AddIncidentButton";
 import Calendar from "./components/calendar/Calendar";
@@ -24,11 +25,25 @@ configure({
 });
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(false);
   const dispatch = useDispatch();
 
   useAutoLogin();
 
   useSocketHandlers();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 640);
+      };
+
+      handleResize();
+      window.addEventListener("resize", handleResize);
+
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(fetchIncidents(CALEDAR_STOK_VALUE));
@@ -46,6 +61,11 @@ export default function Home() {
       <AppFooter />
       {/* Кнопка добавления записи */}
       <AddIncidentButton />
+      {/* Оповещения */}
+      <ToasterComponent
+        mobile={isMobile}
+        className="optional additional classes"
+      />
     </div>
   );
 }

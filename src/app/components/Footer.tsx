@@ -1,5 +1,5 @@
-'use client';
-import { Footer } from '@gravity-ui/navigation';
+"use client";
+import { Footer } from "@gravity-ui/navigation";
 
 export default function AppFooter() {
   return (
@@ -9,15 +9,15 @@ export default function AppFooter() {
       moreButtonTitle="Show more"
       copyright={`© ${new Date().getFullYear()} Pivo technologies`}
       logo={{
-        text: 'Status Tracker',
+        text: "Status Tracker",
       }}
       menuItems={[
         {
-            text: 'Powered by pivo',
-            href: '',
-            target: 'blank',
+          text: "Powered by pivo",
+          href: "",
+          target: "blank",
         },
-    ]}
+      ]}
     />
   );
 }

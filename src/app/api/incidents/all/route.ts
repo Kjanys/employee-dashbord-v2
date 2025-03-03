@@ -1,6 +1,37 @@
-import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
-import { IIncident } from "@/app/types/common/i-incident";
+import { NextResponse } from "next/server";
+
+/**
+ * @swagger
+ * /api/incidents/all:
+ *   get:
+ *     summary: Получить все события за месяц
+ *     description: Возвращает список событий за указанный месяц и год.
+ *     parameters:
+ *       - in: query
+ *         name: month
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: year
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Incident'
+ *       400:
+ *         description: Неверные параметры запроса
+ *       500:
+ *         description: Ошибка сервера
+ */
 
 export async function GET(request: Request) {
   try {
@@ -44,28 +75,11 @@ export async function GET(request: Request) {
         ],
       },
       include: {
-        user: true, // Включаем данные пользователя
+        user: true,
       },
     });
 
-    const allIncidents: IIncident[] = incidents.map(
-      (item) =>
-        ({
-          id: item.id,
-          userId: item.userId,
-          name: item.name,
-          surname: item.surname,
-          status: item.status,
-          date: !item.isPeriod
-            ? new Date(item.date!)
-            : {
-                start: new Date(item.startDate!),
-                end: new Date(item.endDate!),
-              },
-        } as IIncident)
-    );
-
-    return NextResponse.json(allIncidents, { status: 200 });
+    return NextResponse.json(incidents, { status: 200 });
   } catch (error) {
     console.error("Ошибка при получении событий:", error);
     return NextResponse.json(

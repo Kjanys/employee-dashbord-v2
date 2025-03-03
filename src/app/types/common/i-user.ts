@@ -1,16 +1,16 @@
 export type User = {
-  id: number; // Изменяем тип на number
+  id: number;
   name: string;
   surname: string;
   login: string;
-  email: string; // Добавляем email
+  email: string;
 };
 
 export type IUserRegistrationPayload = {
   name: string;
   surname: string;
   login: string;
-  email: string; // Добавляем email
+  email: string;
   password: string;
 };
 

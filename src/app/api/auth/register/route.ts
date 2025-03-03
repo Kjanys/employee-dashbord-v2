@@ -1,7 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
 import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Регистрация пользователя
+ *     description: Регистрирует нового пользователя.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserRegistrationPayload'
+ *     responses:
+ *       201:
+ *         description: Пользователь успешно зарегистрирован
+ *       400:
+ *         description: Пользователь уже существует
+ *       500:
+ *         description: Ошибка сервера
+ */
 
 export async function POST(request: Request) {
   try {
@@ -29,7 +50,7 @@ export async function POST(request: Request) {
         surname,
         login,
         email,
-        password: hashedPassword, // Теперь ошибки не должно быть
+        password: hashedPassword,
       },
     });
 

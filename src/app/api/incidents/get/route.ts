@@ -1,6 +1,30 @@
 import prisma from "@/app/lib/prisma";
-import { getIncident } from "@/app/utils/getIncident";
 import { NextResponse } from "next/server";
+
+/**
+ * @swagger
+ * /api/incidents/get:
+ *   post:
+ *     summary: Получить события по фильтрам
+ *     description: Возвращает список событий для указанного пользователя, периода и статусов.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/IncidentFilterPayload'
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Incident'
+ *       500:
+ *         description: Ошибка сервера
+ */
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +35,6 @@ export async function POST(request: Request) {
       where: {
         userId,
         OR: [
-          // События, которые начинаются или заканчиваются в указанном периоде
           {
             date: {
               gte: startDate,
@@ -32,18 +55,15 @@ export async function POST(request: Request) {
           },
         ],
         status: {
-          in: statuses, // Фильтр по статусам
+          in: statuses,
         },
       },
       include: {
-        user: true, // Включаем данные пользователя
+        user: true,
       },
     });
 
-    return NextResponse.json(
-      incidents.map((item) => getIncident(item)),
-      { status: 200 }
-    );
+    return NextResponse.json(incidents, { status: 200 });
   } catch (error) {
     console.error("Ошибка при получении событий:", error);
     return NextResponse.json(
