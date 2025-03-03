@@ -43,3 +43,10 @@ ENV:
 - WEBSOCKET_ORIGIN_URL=http://localhost:3000 - Путь для связи сервера вебсокета с приложением, должен повторять NEXT_PUBLIC_BASE_URL, но без /api
 - WEBSOCKET_HOST_NAME=localhost - хост вебсокета
 - WEBSOCKET_PORT_NAME=3001 - порт вебсокета
+
+Build:
+
+```bash
+npm i --legacy-peer-deps
+npm run build
+```
