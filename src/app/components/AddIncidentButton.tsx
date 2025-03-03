@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { socket } from "@/socket";
 import { Plus } from "@gravity-ui/icons";
@@ -30,7 +31,7 @@ export default function AddIncidentButton() {
         socket.emit("incidentAdded", result.incident);
         setIsModalOpen(false);
       }
-    } catch (err) {
+    } catch (err: any) {
       toaster.add({
         title: "Ошибка при добавлении события",
         name: "getNewError",
@@ -50,7 +51,7 @@ export default function AddIncidentButton() {
       name: "getNewError",
       theme: "danger",
       isClosable: true,
-      content: error.message,
+      content: (error as any).message,
     });
   }, [error]);
 

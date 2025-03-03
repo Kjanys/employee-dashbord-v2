@@ -67,7 +67,7 @@ export const JournalList = ({
       name: "getJournalError",
       theme: "danger",
       isClosable: true,
-      content: error.message,
+      content: (error as any).message,
     });
   }, [error]);
 
@@ -101,7 +101,7 @@ export const JournalList = ({
         name: "getUpdateError",
         theme: "danger",
         isClosable: true,
-        content: error.message,
+        content: (error as any).message,
       });
       console.error("Ошибка при обновлении события:", error);
       setIsEditModalOpen(false);
@@ -131,7 +131,7 @@ export const JournalList = ({
           name: "getDeleteError",
           theme: "danger",
           isClosable: true,
-          content: error.message,
+          content: (error as any).message,
         });
         console.error("Ошибка при удалении события:", error);
       }

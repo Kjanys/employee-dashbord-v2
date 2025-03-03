@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import {
   CurrentDate,
@@ -117,14 +118,14 @@ export default function Calendar() {
       fetchIncidents({
         ...currentDate,
         month: currentDate.month + (isPrev ? -1 : 1),
-      })
+      }) as any
     );
     setDirection(isPrev ? CalendarDirections.LEFT : CalendarDirections.RIGHT);
   };
 
   const handleToday = () => {
     dispatch(setCurrentDate(CALEDAR_STOK_VALUE));
-    dispatch(fetchIncidents(CALEDAR_STOK_VALUE));
+    dispatch(fetchIncidents(CALEDAR_STOK_VALUE) as any);
     setDirection(CalendarDirections.RIGHT);
   };
 

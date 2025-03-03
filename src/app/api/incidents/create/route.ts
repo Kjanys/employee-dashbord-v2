@@ -25,7 +25,7 @@ import { NextResponse } from "next/server";
  *         description: Ошибка сервера
  */
 
-export async function POST(request: Request, res: any) {
+export async function POST(request: Request) {
   try {
     const {
       userId,

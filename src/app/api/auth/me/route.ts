@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/app/lib/prisma";
 import { IUserAnswer } from "@/app/types/common/i-user";
 import jwt from "jsonwebtoken";
@@ -55,7 +56,8 @@ export async function GET(request: Request) {
     };
 
     return NextResponse.json(newUser, { status: 200 });
-  } catch (err) {
+  } catch (err: any) {
+    console.log("Ошибка входа по токену: ", err.message);
     return NextResponse.json({ message: "Неверный токен" }, { status: 401 });
   }
 }

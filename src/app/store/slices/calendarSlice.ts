@@ -44,7 +44,7 @@ export const fetchIncidents = createAsyncThunk(
         getConvertDate(incident)
       );
       return incidents;
-    } catch (error) {
+    } catch (error: any) {
       toaster.add({
         title: "Ошбка получения записей",
         name: "getAllError",

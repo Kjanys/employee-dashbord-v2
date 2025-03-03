@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { settings } from "@gravity-ui/date-utils";
@@ -46,7 +47,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchIncidents(CALEDAR_STOK_VALUE));
+    dispatch(fetchIncidents(CALEDAR_STOK_VALUE) as any);
   }, [dispatch]);
 
   return (
