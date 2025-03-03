@@ -1,4 +1,12 @@
-Это [Next.js](https://nextjs.org) проект загруженный с [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### Описание
+
+Это удобный инструмент для отслеживания посещаемости сотрудников. С его помощью пользователи могут легко отмечать своё присутствие или отсутствие в офисе, указывая причину.
+
+## Стек
+- Next.js
+- Redux и RTK (Redux Toolkit)
+- Socket.io
+- Tailwind CSS и Gravity UI
 
 ## Начало работы
 
