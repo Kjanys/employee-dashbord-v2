@@ -88,7 +88,8 @@ export default function AuthModal({
 
       if (rule.validate) {
         const validationError = rule.validate(value, form);
-        if (validationError) {
+
+        if (!validationError) {
           errors[field] = validationError;
         }
       }
