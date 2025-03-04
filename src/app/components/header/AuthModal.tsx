@@ -89,7 +89,7 @@ export default function AuthModal({
       if (rule.validate) {
         const validationError = rule.validate(value, form);
 
-        if (!validationError) {
+        if (typeof validationError === "string") {
           errors[field] = validationError;
         }
       }
@@ -245,6 +245,7 @@ export default function AuthModal({
                 Email
               </Text>
               <TextInput
+                type="email"
                 value={registerForm.email}
                 onChange={(e) => handleFormChange("email", e.target.value)}
                 validationState={registerErrors.email ? "invalid" : undefined}
@@ -319,6 +320,7 @@ export default function AuthModal({
               </Text>
               <div className="flex items-center gap-2 h-[56px] relative">
                 <TextInput
+                  type="password"
                   value={registerForm.key}
                   onChange={(e) => handleFormChange("key", e.target.value)}
                   validationState={registerErrors.key ? "invalid" : undefined}

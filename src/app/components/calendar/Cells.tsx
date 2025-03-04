@@ -47,7 +47,7 @@ export const Cells = ({
     const maxEmployees =
       Math.floor((cellHeight - NUMBER_HEIGHT * 2) / EMPLOYEE_HEIGHT) *
       (isMobile ? 1 : 2);
-    console.log("maxEmployees", maxEmployees);
+
     setMaxVisibleEmployees(maxEmployees);
   }, [cellHeight]);
 

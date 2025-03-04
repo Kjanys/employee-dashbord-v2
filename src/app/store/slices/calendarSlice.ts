@@ -71,12 +71,11 @@ const calendarSlice = createSlice({
       state.currentMonthIncidents = action.payload;
     },
     setAddIncidents(state, action: PayloadAction<IIncident>) {
-      console.log("NEW INCIDENT", action.payload);
       if (
         !isIncidentInPeriod(action.payload, getCurentPeriod(state.currentDate))
       )
         return;
-      console.log("AAAAA");
+
       state.currentMonthIncidents = [
         ...state.currentMonthIncidents,
         action.payload,

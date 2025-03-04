@@ -14,10 +14,7 @@ export const isIncidentInPeriod = (
   const incidentEnd = !incident.isPeriod
     ? new Date(incident.date!)
     : new Date(incident.endDate!);
-  console.log("incident", incident);
-  console.log("incidentStart", incidentStart);
-  console.log("incidentEnd", incidentEnd);
-  console.log("selectedPeriod", selectedPeriod);
+
   return (
     (incidentStart! >= startDate && incidentStart! <= endDate) || // Начало события в периоде
     (incidentEnd! >= startDate && incidentEnd! <= endDate) || // Конец события в периоде

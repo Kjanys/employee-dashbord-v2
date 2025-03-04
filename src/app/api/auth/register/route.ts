@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import prisma from "@/app/lib/prisma";
+import { IUserAnswer } from "@/app/types/common/i-user";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 /**
  * @swagger
@@ -54,11 +56,20 @@ export async function POST(request: Request) {
       },
     });
 
-    // Возвращаем успешный ответ
-    return NextResponse.json(
-      { message: "Пользователь успешно зарегистрирован" },
-      { status: 201 }
+    const token = jwt.sign(
+      { userId: newUser.id },
+      process.env.JWT_SECRET || "secret",
+      {
+        expiresIn: "1h",
+      }
     );
+
+    const user: IUserAnswer = {
+      ...newUser,
+      token: token,
+    };
+    // Возвращаем успешный ответ
+    return NextResponse.json(user, { status: 201 });
   } catch (error) {
     console.error("Ошибка при регистрации:", error);
     return NextResponse.json(
