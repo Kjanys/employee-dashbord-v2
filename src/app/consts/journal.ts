@@ -3,7 +3,7 @@ import { IPeriod } from "../types/system/i-period";
 
 export const DICT_STATUS = {
   [IIncidentStatus.REMOTE]: {
-    name: "Удалённо",
+    name: "Удаленно",
     color: "--g-color-private-blue-450-solid",
   },
   [IIncidentStatus.SICK]: {
