@@ -40,7 +40,7 @@ export const Cells = ({
   cellHeight,
 }: CellsProps): JSX.Element[] => {
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const today = new Date().getDate();
+  const today = new Date();
   const [maxVisibleEmployees, setMaxVisibleEmployees] = useState(3);
 
   // Рассчитываем максимальное количество записей, которые могут поместиться в ячейку
@@ -57,6 +57,11 @@ export const Cells = ({
       isEmployeeInDay(employee, day, currentDate.month, currentDate.year)
     );
 
+    const isCurrentDay =
+      currentDate.month === today.getMonth() &&
+      currentDate.year === today.getFullYear() &&
+      day === today.getDate();
+
     // На мобильных устройствах показываем только одну колонку
     const showTwoColumns =
       !isMobile &&
@@ -67,20 +72,14 @@ export const Cells = ({
     return (
       <div
         key={day}
-        className="p-1 sm:p-2 border rounded-lg text-center hover:bg-[var(--g-color-private-blue-100)] cursor-pointer border-[var(--g-color-private-blue-500)] flex flex-col justify-start"
+        className={`p-1 sm:p-2 border rounded-lg text-center bg-[var(${
+          isCurrentDay ? "--g-color-private-blue-100" : ""
+        })] hover:bg-[var(--g-color-private-blue-100)] cursor-pointer border-[var(--g-color-private-blue-500)] flex flex-col justify-start`}
         style={{ height: cellHeight }}
         onClick={() => handleDayClick(day)}
       >
         <div className="text-sm font-semibold flex justify-center mb-1">
-          <div
-            className={`text-sm font-semibold w-min pr-1 pl-1 ${
-              day === today
-                ? "border border-[var(--g-color-private-blue-500)] rounded bg-[var(--g-color-private-blue-100)]"
-                : ""
-            }`}
-          >
-            {day}
-          </div>
+          {day}
         </div>
         <div
           className={`grid ${
