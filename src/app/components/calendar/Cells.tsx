@@ -40,6 +40,7 @@ export const Cells = ({
   cellHeight,
 }: CellsProps): JSX.Element[] => {
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const today = new Date().getDate();
   const [maxVisibleEmployees, setMaxVisibleEmployees] = useState(3);
 
   // Рассчитываем максимальное количество записей, которые могут поместиться в ячейку
@@ -70,7 +71,17 @@ export const Cells = ({
         style={{ height: cellHeight }}
         onClick={() => handleDayClick(day)}
       >
-        <div className="text-sm font-semibold mb-2">{day}</div>
+        <div className="text-sm font-semibold flex justify-center mb-1">
+          <div
+            className={`text-sm font-semibold w-min pr-1 pl-1 ${
+              day === today
+                ? "border border-[var(--g-color-private-blue-500)] rounded bg-[var(--g-color-private-blue-100)]"
+                : ""
+            }`}
+          >
+            {day}
+          </div>
+        </div>
         <div
           className={`grid ${
             showTwoColumns ? "grid-cols-2" : "grid-cols-1"
