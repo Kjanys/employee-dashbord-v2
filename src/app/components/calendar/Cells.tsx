@@ -72,10 +72,11 @@ export const Cells = ({
     return (
       <div
         key={day}
-        className={`p-1 sm:p-2 border rounded-lg text-center bg-[var(${
-          isCurrentDay ? "--g-color-private-blue-100" : ""
-        })] hover:bg-[var(--g-color-private-blue-100)] cursor-pointer border-[var(--g-color-private-blue-500)] flex flex-col justify-start`}
-        style={{ height: cellHeight }}
+        className={`p-1 sm:p-2 border rounded-lg text-center hover:bg-[var(--g-color-private-blue-100)] cursor-pointer border-[var(--g-color-private-blue-500)] flex flex-col justify-start`}
+        style={{
+          height: cellHeight,
+          background: isCurrentDay ? "var(--g-color-private-blue-100)" : "",
+        }}
         onClick={() => handleDayClick(day)}
       >
         <div className="text-sm font-semibold flex justify-center mb-1">
