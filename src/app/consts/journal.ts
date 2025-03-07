@@ -1,4 +1,4 @@
-import { IIncidentStatus } from "../types/common/i-incident";
+import { IIncidentStatus, PeriodName } from "../types/common/i-incident";
 import { IPeriod } from "../types/system/i-period";
 
 export const DICT_STATUS = {
@@ -35,4 +35,13 @@ export const DEFAULT_SELECTED_STATUS = {
 export const DEFAULT_JOURNAL_PERIOD: IPeriod = {
   startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1), // Начало текущего месяца
   endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0), // Конец текущего месяца
+};
+
+export const DICT_PERIODNAMES = {
+  [PeriodName.DAY]: "Текущий день",
+  [PeriodName.WEEK]: "Текущая неделя",
+  [PeriodName.MONTH]: "Текущий месяц",
+  [PeriodName.YEAR]: "Текущий год",
+  [PeriodName.ALL]: "Все",
+  [PeriodName.PERIOD]: "Произвольный период",
 };

@@ -1,10 +1,11 @@
 import {
   IIncidentDeletePayload,
+  IIncidentJournalPaylod,
   IIncidentPayload,
 } from "@/app/types/system/i-incident";
 import { getConvertDate } from "@/app/utils/getConvertDate";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IIncident, IIncidentStatus } from "../../types/common/i-incident";
+import { IIncident } from "../../types/common/i-incident";
 import { MethodType } from "../../types/system/i-query";
 
 export const IncidentsApi = createApi({
@@ -23,19 +24,11 @@ export const IncidentsApi = createApi({
   tagTypes: ["Incident"],
   endpoints: (builder) => ({
     // Получение событий
-    fetchIncidents: builder.query<
-      IIncident[],
-      {
-        userId: number | undefined;
-        startDate: Date;
-        endDate: Date;
-        statuses: IIncidentStatus[];
-      }
-    >({
-      query: ({ userId, startDate, endDate, statuses }) => ({
+    fetchIncidents: builder.query<IIncident[], IIncidentJournalPaylod>({
+      query: (data: IIncidentJournalPaylod) => ({
         url: `/incidents/get`,
         method: MethodType.POST,
-        body: { userId, startDate, endDate, statuses },
+        body: data,
       }),
       transformResponse: (response: IIncident[]) =>
         response.map((item: IIncident) => getConvertDate(item)),

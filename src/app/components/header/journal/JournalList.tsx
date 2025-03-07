@@ -8,7 +8,11 @@ import {
 } from "@/app/store/api/api-incidents"; // Импортируем новые хуки
 import { setIncidents } from "@/app/store/slices/userJournalSlice";
 import { RootState } from "@/app/store/store";
-import { IIncident, IIncidentStatus } from "@/app/types/common/i-incident";
+import {
+  IIncident,
+  IIncidentStatus,
+  PeriodName,
+} from "@/app/types/common/i-incident";
 import { IPeriod } from "@/app/types/system/i-period";
 import { formatDate } from "@/app/utils/formatDate";
 import { getStatusClass } from "@/app/utils/getStatusClass";
@@ -24,7 +28,8 @@ import IcidentModal from "../../IcidentModal";
 interface JournalListProps {
   handleCloseModal: () => void;
   sortDesc: boolean;
-  selectedPeriod: IPeriod;
+  selectedPeriod: IPeriod | null;
+  curPeriodName: PeriodName;
   selectedStatuses: Record<IIncidentStatus, boolean>;
 }
 
@@ -32,6 +37,7 @@ export const JournalList = ({
   handleCloseModal,
   sortDesc,
   selectedPeriod,
+  curPeriodName,
   selectedStatuses,
 }: JournalListProps) => {
   const { incidents } = useSelector((state: RootState) => state.userJournal);
@@ -53,9 +59,16 @@ export const JournalList = ({
 
   // Используем хук для получения событий
   const { data, error, isLoading } = useFetchIncidentsQuery({
-    userId: user?.id,
-    startDate: new Date(selectedPeriod.startDate.setHours(0, 0, 0, 0)),
-    endDate: new Date(selectedPeriod.endDate.setHours(23, 59, 59, 59)),
+    userId: user ? user.id : 1,
+    periodName: curPeriodName,
+    startDate:
+      selectedPeriod && curPeriodName === PeriodName.PERIOD
+        ? new Date(selectedPeriod.startDate.setHours(0, 0, 0, 0))
+        : null,
+    endDate:
+      selectedPeriod && curPeriodName === PeriodName.PERIOD
+        ? new Date(selectedPeriod.endDate.setHours(23, 59, 59, 59))
+        : null,
     statuses: activeStatuses,
   });
 

@@ -5,6 +5,7 @@ import {
   fetchIncidents,
   setCurrentDate,
 } from "@/app/store/slices/calendarSlice";
+import { getCurDate } from "@/app/utils/getCurDate";
 import { Card } from "@gravity-ui/uikit";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -108,18 +109,14 @@ export default function Calendar() {
   };
 
   const handleSwitchMonth = (isPrev: boolean) => {
-    dispatch(
-      setCurrentDate({
-        ...currentDate,
-        month: currentDate.month + (isPrev ? -1 : 1),
-      })
-    );
-    dispatch(
-      fetchIncidents({
-        ...currentDate,
-        month: currentDate.month + (isPrev ? -1 : 1),
-      }) as any
-    );
+    const newDate = getCurDate(currentDate, isPrev);
+
+    // Переключаем месяц
+    dispatch(setCurrentDate(newDate));
+
+    // Получаем новые данные на новый месяц
+    dispatch(fetchIncidents(newDate) as any);
+
     setDirection(isPrev ? CalendarDirections.LEFT : CalendarDirections.RIGHT);
   };
 

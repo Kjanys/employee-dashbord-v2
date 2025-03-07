@@ -17,3 +17,12 @@ export enum IIncidentStatus {
   STUDY = "STUDY",
   OTHER = "OTHER",
 }
+
+export enum PeriodName {
+  DAY = "DAY",
+  WEEK = "WEEK",
+  MONTH = "MONTH",
+  YEAR = "YEAR",
+  ALL = "ALL",
+  PERIOD = "PERIOD",
+}

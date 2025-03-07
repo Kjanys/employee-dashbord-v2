@@ -1,3 +1,4 @@
+import { PeriodName } from "../types/common/i-incident";
 import { IPeriod } from "../types/system/i-period";
 
 // Определение текста для кнопки выбора периода
@@ -24,28 +25,28 @@ export const getPeriodButtonText = (selectedPeriod: IPeriod) => {
     selectedPeriod.startDate.toDateString() === new Date().toDateString() &&
     selectedPeriod.endDate.toDateString() === new Date().toDateString()
   ) {
-    return "Текущий день";
+    return PeriodName.DAY;
   } else if (
     selectedPeriod.startDate.toDateString() === startOfWeek.toDateString() &&
     selectedPeriod.endDate.toDateString() === endOfWeek.toDateString()
   ) {
-    return "Текущая неделя";
+    return PeriodName.WEEK;
   } else if (
     selectedPeriod.startDate.toDateString() === startOfMonth.toDateString() &&
     selectedPeriod.endDate.toDateString() === endOfMonth.toDateString()
   ) {
-    return "Текущий месяц";
+    return PeriodName.MONTH;
   } else if (
     selectedPeriod.startDate.toDateString() === startOfYear.toDateString() &&
     selectedPeriod.endDate.toDateString() === endOfYear.toDateString()
   ) {
-    return "Текущий год";
+    return PeriodName.YEAR;
   } else if (
     selectedPeriod.startDate.getTime() === new Date(0).getTime() &&
     selectedPeriod.endDate.toDateString() === endOfYear.toDateString()
   ) {
-    return "Все";
+    return PeriodName.ALL;
   } else {
-    return "Произвольный период";
+    return PeriodName.PERIOD;
   }
 };

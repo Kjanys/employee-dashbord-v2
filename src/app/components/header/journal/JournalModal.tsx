@@ -4,9 +4,10 @@ import {
   DEFAULT_SELECTED_STATUS,
 } from "@/app/consts/journal";
 import { IPeriod } from "@/app/types/system/i-period";
+import { getPeriodFromName } from "@/app/utils/getPeriodFromName";
 import { Button, Modal, Text } from "@gravity-ui/uikit";
 import { useState } from "react";
-import { IIncidentStatus } from "../../../types/common/i-incident";
+import { IIncidentStatus, PeriodName } from "../../../types/common/i-incident";
 import { JournalList } from "./JournalList";
 import { PeriodSelector } from "./PeriodSelector";
 import { StatusFilterButtons } from "./StatusFilterButtons";
@@ -21,7 +22,10 @@ export default function JournalModal({
   setIsModalOpen,
 }: JournalModalProps) {
   const [sortDesc, setSortDesc] = useState(true);
-  const [selectedPeriod, setSelectedPeriod] = useState<IPeriod>(
+  const [curPeriodName, setCurPeriodName] = useState<PeriodName>(
+    PeriodName.MONTH
+  );
+  const [selectedPeriod, setSelectedPeriod] = useState<IPeriod | null>(
     DEFAULT_JOURNAL_PERIOD
   );
 
@@ -36,8 +40,9 @@ export default function JournalModal({
   };
 
   // Обработчик выбора периода
-  const handlePeriodChange = (period: IPeriod) => {
-    setSelectedPeriod(period);
+  const handlePeriodChange = (periodName: PeriodName, period?: IPeriod) => {
+    setCurPeriodName(periodName);
+    setSelectedPeriod(getPeriodFromName(periodName, period));
     setIsPopoverOpen(false);
   };
 
@@ -65,6 +70,7 @@ export default function JournalModal({
           handlePeriodChange={handlePeriodChange}
           setSortDesc={setSortDesc}
           sortDesc={sortDesc}
+          curPeriodName={curPeriodName}
         />
 
         {/* Кнопки фильтрации по статусу */}
@@ -78,6 +84,7 @@ export default function JournalModal({
           sortDesc={sortDesc}
           handleCloseModal={handleCloseModal}
           selectedPeriod={selectedPeriod}
+          curPeriodName={curPeriodName}
           selectedStatuses={selectedStatuses}
         />
 
