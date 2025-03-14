@@ -21,7 +21,7 @@ npm run dev
 ## Сборка
 
 Окружение:
-- NEXT_PUBLIC_REGISTRATION_KEY=secret-key - Ключ для регистрации на фронте
+- PUBLIC_REGISTRATION_KEY=secret-key - Ключ для регистрации на фронте
 - NEXT_PUBLIC_BASE_URL=http://localhost:3000/api - Путь для API
 - JWT_SECRET=your-secret-key - Ключ для шифрования пароля в БД
 - DATABASE_URL=postgresql://postgres:PASSWORD@localhost:5432/employee_tracker?schema=public - Путь до БД, PASSWORD пароль от нее
