@@ -28,12 +28,18 @@ import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
-    const { name, surname, login, email, password } = await request.json();
+    const { name, surname, login, email, password, key } = await request.json();
 
     // Проверка, существует ли пользователь
     const existingUser = await prisma.user.findUnique({
       where: { login },
     });
+
+    const publicKey = process.env.PUBLIC_REGISTRATION_KEY;
+
+    if (key != publicKey) {
+      return NextResponse.json({ message: "Неверный ключ" }, { status: 400 });
+    }
 
     if (existingUser) {
       return NextResponse.json(

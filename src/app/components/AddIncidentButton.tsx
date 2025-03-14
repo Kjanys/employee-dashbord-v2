@@ -29,6 +29,15 @@ export default function AddIncidentButton() {
 
       if (result) {
         socket.emit("incidentAdded", result.incident);
+
+        toaster.add({
+          title: "Событие",
+          name: "getUpdateError",
+          theme: "success",
+          isClosable: true,
+          content: "Событие добавлено успешно",
+        });
+
         setIsModalOpen(false);
       }
     } catch (err: any) {

@@ -105,6 +105,15 @@ export const JournalList = ({
 
       if (result) {
         socket.emit("incidentUpdated", result.incident);
+
+        toaster.add({
+          title: "Событие",
+          name: "getUpdateError",
+          theme: "success",
+          isClosable: true,
+          content: "Событие изменено успешно",
+        });
+
         setIsEditModalOpen(false);
         handleCloseModal();
       }
@@ -134,6 +143,15 @@ export const JournalList = ({
 
         if (result) {
           socket.emit("incidentDeleted", result.id);
+
+          toaster.add({
+            title: "Событие",
+            name: "getUpdateError",
+            theme: "success",
+            isClosable: true,
+            content: "Событие удалено успешно",
+          });
+
           setIsDeleteModalOpen(false);
           setDeletingIncidentId(null);
           handleCloseModal();

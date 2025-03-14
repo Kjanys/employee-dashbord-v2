@@ -12,6 +12,7 @@ export type IUserRegistrationPayload = {
   login: string;
   email: string;
   password: string;
+  key: string;
 };
 
 export type IUserLoginPayload = { login: string; password: string };

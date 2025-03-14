@@ -46,7 +46,7 @@ export const fetchIncidents = createAsyncThunk(
       return incidents;
     } catch (error: any) {
       toaster.add({
-        title: "Ошбка получения записей",
+        title: "Ошибка получения записей",
         name: "getAllError",
         theme: "danger",
         isClosable: true,

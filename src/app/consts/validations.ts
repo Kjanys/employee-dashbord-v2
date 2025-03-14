@@ -32,7 +32,5 @@ export const REGISTER_VALIDATION_RULES = {
   key: {
     required: true,
     message: "Ключ обязателен",
-    validate: (value: string) =>
-      value === process.env.NEXT_PUBLIC_REGISTRATION_KEY || "Неверный ключ",
   },
 };

@@ -25,6 +25,8 @@ import {
 import { SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/slices/userSlice";
+import { toaster } from "@/app/providers";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 interface AuthModalProps {
   isModalOpen: boolean;
@@ -110,8 +112,19 @@ export default function AuthModal({
         login: loginForm.login,
         password: loginForm.password,
       }).unwrap();
+
       localStorage.setItem("token", user.token);
+
       dispatch(login(user));
+
+      toaster.add({
+        title: "Вход",
+        name: "getUpdateError",
+        theme: "success",
+        isClosable: true,
+        content: "Вход выполнен успешно",
+      });
+
       handleModalClose();
     } catch (error) {
       setLoginErrors({ general: "Неверный логин или пароль" });
@@ -132,9 +145,21 @@ export default function AuthModal({
         login: registerForm.login,
         password: registerForm.password,
         email: registerForm.email!,
+        key: registerForm.key ?? "",
       }).unwrap();
+
       localStorage.setItem("token", user.token);
+
       dispatch(login(user));
+
+      toaster.add({
+        title: "Регистрация",
+        name: "getUpdateError",
+        theme: "success",
+        isClosable: true,
+        content: "Регистрация выполнена успешно",
+      });
+
       handleModalClose();
     } catch (error) {
       setRegisterErrors({ general: "Ошибка регистрации" });
@@ -171,6 +196,67 @@ export default function AuthModal({
       setRegisterForm((prev) => ({ ...prev, [field]: value }));
     }
   };
+
+  useEffect(() => {
+    if (!registerError) return;
+
+    if ((registerError as FetchBaseQueryError).data) {
+      if (
+        ((registerError as FetchBaseQueryError).data as any).message ===
+        "Неверный ключ"
+      ) {
+        const errors = {
+          ...registerErrors,
+          ["key"]: ((registerError as FetchBaseQueryError).data as any).message,
+        };
+
+        setRegisterErrors(errors);
+        return;
+      }
+
+      toaster.add({
+        title: "Ошибка регистрации",
+        name: "getUpdateError",
+        theme: "danger",
+        isClosable: true,
+        content: ((registerError as FetchBaseQueryError).data as any).message,
+      });
+
+      return;
+    }
+
+    toaster.add({
+      title: "Ошибка регистрации",
+      name: "getUpdateError",
+      theme: "danger",
+      isClosable: true,
+      content: "Неизвестная ошибка",
+    });
+  }, [registerError]);
+
+  useEffect(() => {
+    if (!loginError) return;
+
+    if ((loginError as FetchBaseQueryError).data) {
+      toaster.add({
+        title: "Ошибка входа",
+        name: "getUpdateError",
+        theme: "danger",
+        isClosable: true,
+        content: ((loginError as FetchBaseQueryError).data as any).message,
+      });
+
+      return;
+    }
+
+    toaster.add({
+      title: "Ошибка входа",
+      name: "getUpdateError",
+      theme: "danger",
+      isClosable: true,
+      content: "Неизвестная ошибка",
+    });
+  }, [loginError]);
 
   return (
     <Modal open={isModalOpen} onClose={handleModalClose}>
