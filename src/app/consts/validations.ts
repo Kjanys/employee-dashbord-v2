@@ -21,7 +21,12 @@ export const REGISTER_VALIDATION_RULES = {
   },
   name: { required: true, message: "Имя обязательно" },
   surname: { required: true, message: "Фамилия обязательна" },
-  email: { required: true, message: "Email обязателен" },
+  email: {
+    required: true,
+    message: "Email обязателен",
+    validate: (value: string) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Некорректный формат email",
+  },
   password: { required: true, message: "Пароль обязателен" },
   repeatPassword: {
     required: true,
